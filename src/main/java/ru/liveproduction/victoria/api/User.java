@@ -7,15 +7,33 @@ Created dantes on 05.04.19 22:33
 
 package ru.liveproduction.victoria.api;
 
+import java.util.List;
+
 public class User {
 
-    public int getId(){}
+    private int id;
+    private String name;
+    private String macAddress;
+    private List<Integer> packsIds;
+    private long registerTime;
 
-    public String getName(){}
+    public int getId(){
+        return id;
+    }
 
-    public String getMacAddress(){}
+    public String getName(){
+        return name;
+    }
 
-    public boolean isPackAdded(int packId) {}
+    public String getMacAddress(){
+        return macAddress;
+    }
 
-    public long getRegistrationTime(){}
+    public boolean isPackAdded(int packId) {
+        return packsIds.contains(packId);
+    }
+
+    public long getRegistrationTime(){
+        return registerTime;
+    }
 }
