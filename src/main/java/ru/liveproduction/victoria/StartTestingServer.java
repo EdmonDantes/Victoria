@@ -7,23 +7,16 @@ Created dantes on 05.04.19 22:45
 
 package ru.liveproduction.victoria;
 
-import ru.liveproduction.victoria.mysql.MysqlConnection;
 import ru.liveproduction.victoria.mysql.MysqlManager;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class StartTestingServer {
     public static void main(String ...args) throws ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://localhost:3306/testApi?useUnicode=true&characterEncoding=UTF-8";
+        String url = "jdbc:mysql://localhost:3306/victoriadb?useUnicode=true&characterEncoding=UTF-8";
         String user = "root";
         String password = "1111qazwsxqweasd";
 
         MysqlManager manager = new MysqlManager(10, url, user, password);
-        manager.addTask("Select * from actions", MysqlManager.printResult);
-
-        //manager.addTask("select * from all_actions where id > 12", )
     }
 }

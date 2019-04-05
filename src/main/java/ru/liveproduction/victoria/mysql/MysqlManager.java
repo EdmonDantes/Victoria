@@ -17,6 +17,16 @@ public final class MysqlManager {
     private volatile static Map<Long, ResultSet> results;
     private volatile int useConnection = 0;
 
+    public final static ResultRunnable printResult = (results, id, thread) -> {
+        while (results.next()) {
+            for (int i = 1; i <= results.getMetaData().getColumnCount(); i++) {
+                System.out.print(results.getString(i) + ' ');
+            }
+            System.out.println();
+        }
+        return true;
+    };
+
     public MysqlManager(int countConnections, String url, String user, String password) throws SQLException {
         this.countConnections = countConnections;
         connections = new ArrayList<>(countConnections);
@@ -63,16 +73,4 @@ public final class MysqlManager {
         });
     }
 
-    public final static ResultRunnable printResult = new ResultRunnable() {
-        @Override
-        public boolean exec(ResultSet results, long id, Thread thread) throws SQLException {
-            while (results.next()) {
-                for (int i = 1; i <= results.getMetaData().getColumnCount(); i++) {
-                    System.out.print(results.getString(i) + ' ');
-                }
-                System.out.println();
-            }
-            return true;
-        }
-    };
 }
