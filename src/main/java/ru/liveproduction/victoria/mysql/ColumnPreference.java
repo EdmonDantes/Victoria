@@ -8,6 +8,7 @@ Created dantes on 06.04.19 2:18
 package ru.liveproduction.victoria.mysql;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ColumnPreference {
@@ -63,4 +64,19 @@ public class ColumnPreference {
     }
 
     private int countColumn;
+    private List<TYPES> columnTypes;
+
+    public ColumnPreference(int count, List<TYPES> types) {
+        this.countColumn = count;
+        this.columnTypes = types;
+    }
+
+    public int getCountColumn() {
+        return countColumn;
+    }
+
+    public String getColumnType(int index) {
+        if (index < 0 || index > countColumn) return null;
+        return string.get(columnTypes.get(index));
+    }
 }
