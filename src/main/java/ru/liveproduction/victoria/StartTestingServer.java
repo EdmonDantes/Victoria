@@ -7,6 +7,7 @@ Created dantes on 05.04.19 22:45
 
 package ru.liveproduction.victoria;
 
+import ru.liveproduction.victoria.mysql.MysqlConnection;
 import ru.liveproduction.victoria.mysql.MysqlManager;
 
 import java.sql.Connection;
@@ -16,21 +17,13 @@ import java.sql.SQLException;
 
 public class StartTestingServer {
     public static void main(String ...args) throws ClassNotFoundException, SQLException {
-        String connectionUrl = "jdbc:mysql://localhost:3306/testApi?useUnicode=true&characterEncoding=UTF-8&user=root&password=1111qazwsxqweasd";
+        String url = "jdbc:mysql://localhost:3306/testApi?useUnicode=true&characterEncoding=UTF-8";
+        String user = "root";
+        String password = "1111qazwsxqweasd";
 
-        MysqlManager.MysqlConnection connection = new MysqlManager.MysqlConnection("jdbc:mysql://localhost:3306/testApi?useUnicode=true&characterEncoding=UTF-8", "root", "1111qazwsxqweasd");
-        long tmp = connection.addTask("show tables");
+        MysqlManager manager = new MysqlManager(10, url, user, password);
+        manager.addTask("Select * from actions", MysqlManager.printResult);
 
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ResultSet rs = connection.getResult(tmp);
-
-        while (rs.next()) {
-            System.out.println(rs.getString(1));
-        }
+        //manager.addTask("select * from all_actions where id > 12", )
     }
 }

@@ -7,83 +7,72 @@ Created dantes on 05.04.19 22:59
 
 package ru.liveproduction.victoria.mysql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public final class MysqlManager {
+    private volatile int countConnections;
+    private volatile List<MysqlConnection> connections;
+    private volatile static Map<Long, ResultSet> results;
+    private volatile int useConnection = 0;
 
-    public final static class MysqlConnection {
-        private volatile Connection mysqlConnection;
-        private volatile Thread threadConnection;
-        private volatile long sleepTimeInMs = 100;
-        private volatile boolean startThread = true;
-        private volatile boolean useConnection = false;
-        private volatile Queue<Map.Entry<String, Long>> query;
-        private volatile Map<Long, ResultRunnable> runnables;
-        private volatile Map<Long, ResultSet> results;
-
-        private volatile long endResultId = 0;
-
-        public MysqlConnection(String url, String user, String password) throws SQLException {
-            query = new LinkedBlockingQueue<>();
-            runnables = new HashMap<>();
-            results = new HashMap<>();
-            mysqlConnection = DriverManager.getConnection(url, user, password);
-            threadConnection = new Thread(() -> {
-                try {
-                    while (startThread) {
-                        while (query.size() > 0) {
-                            Map.Entry<String, Long> pair = query.poll();
-                            assert pair != null;
-                            ResultSet rs = mysqlConnection.prepareStatement(pair.getKey()).executeQuery();
-                            ResultRunnable run = runnables.get(pair.getValue());
-                            if (run == null || !run.exec(rs)){
-                                results.put(pair.getValue(), rs);
-                            }
-                        }
-                        try {
-                            Thread.sleep(sleepTimeInMs);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    assert true;
-                }
-            });
-            threadConnection.start();
-        }
-
-        public boolean canUseConnection() {
-            return !useConnection && startThread;
-        }
-
-        public void setSleepTimeInMs(long sleepTimeInMs) {
-            this.sleepTimeInMs = sleepTimeInMs;
-        }
-
-        public long addTask(String query){
-            long tmp = endResultId++;
-            this.query.add(new AbstractMap.SimpleEntry<>(query, tmp));
-            return tmp;
-        }
-
-        public void addTask(String query, ResultRunnable runnable) {
-            long tmp = endResultId++;
-            this.query.add(new AbstractMap.SimpleEntry<>(query, tmp));
-            this.runnables.put(tmp, runnable);
-        }
-
-        public ResultSet getResult(long id) {
-            return results.get(id);
+    public MysqlManager(int countConnections, String url, String user, String password) throws SQLException {
+        this.countConnections = countConnections;
+        connections = new ArrayList<>(countConnections);
+        for (int i = 0; i < countConnections; i++) {
+            connections.add(i, new MysqlConnection(url, user, password));
         }
     }
 
-    private int countConnections;
+    public long addTask(String query) {
+        for (int i = 0; i < connections.size(); i++) {
+            if (connections.get(i).canUseConnection()) {
+                return connections.get(i).addTask(query, (result, id, thread) -> {
+                    results.put(id, result);
+                    return true;
+                });
+            }
+        }
 
+        if (useConnection > countConnections) useConnection = 0;
+
+        return connections.get(useConnection++).addTask(query, (result, id, thread) -> {
+            results.put(id, result);
+            return true;
+        });
+    }
+
+    public long addTask(String query, ResultRunnable resultRunnable) {
+        for (int i = 0; i < connections.size(); i++) {
+            if (connections.get(i).canUseConnection()) {
+                return connections.get(i).addTask(query, (result, id, thread) -> {
+                    if (!resultRunnable.exec(result, id, thread))
+                        results.put(id, result);
+                    return true;
+                });
+            }
+        }
+
+        if (useConnection > countConnections) useConnection = 0;
+
+        return connections.get(useConnection++).addTask(query, (result, id, thread) -> {
+            if (!resultRunnable.exec(result, id, thread))
+                results.put(id, result);
+            return true;
+        });
+    }
+
+    public final static ResultRunnable printResult = new ResultRunnable() {
+        @Override
+        public boolean exec(ResultSet results, long id, Thread thread) throws SQLException {
+            while (results.next()) {
+                for (int i = 1; i <= results.getMetaData().getColumnCount(); i++) {
+                    System.out.print(results.getString(i) + ' ');
+                }
+                System.out.println();
+            }
+            return true;
+        }
+    };
 }

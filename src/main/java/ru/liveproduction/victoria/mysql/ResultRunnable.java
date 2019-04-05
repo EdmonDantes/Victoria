@@ -8,7 +8,8 @@ Created dantes on 06.04.19 1:25
 package ru.liveproduction.victoria.mysql;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface ResultRunnable{
-    boolean exec(ResultSet results);
+    boolean exec(ResultSet results, long id, Thread thread) throws SQLException;
 }
