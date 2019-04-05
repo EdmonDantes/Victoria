@@ -27,7 +27,7 @@ public class Question {
             int countWrongChar = 0;
             for (int i = 0; i < ansTrim.length(); i++) {
                 if (ansTrim.charAt(i) != ansClientTrim.charAt(i)) countWrongChar++;
-                if (ansTrim.length() / ((double) countWrongChar) > 0.83) return false;
+                if (ansTrim.length() - (ansTrim.length() * 0.83) < countWrongChar) return false;
             }
             return true;
         }
