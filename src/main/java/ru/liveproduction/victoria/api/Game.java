@@ -1,7 +1,9 @@
 package ru.liveproduction.victoria.api;
 
+import java.util.List;
+
 public class Game {
-    List <user> users;
+    List<User> users;
     int index_play_user;
     int max_user;
     Pack pack_q;
