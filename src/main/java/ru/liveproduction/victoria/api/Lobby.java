@@ -1,11 +1,10 @@
 package ru.liveproduction.victoria.api;
 
 import com.google.gson.JsonObject;
+import javafx.util.Pair;
 import ru.liveproduction.victoria.server.PackManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Lobby {
     String name;
@@ -13,7 +12,7 @@ public class Lobby {
     int maxPlayers;
     int timeRead;
     int timeWrite;
-    List<User> players;
+    List<Map.Entry<User, Boolean>> players;
     boolean easy, middle, hard;
 
     public Lobby(String name, int packId, int maxPlayers, int timeWrite, int timeRead, boolean easy, boolean middle, boolean hard) {
@@ -30,13 +29,21 @@ public class Lobby {
 
     public int addUserToLobby(User user) {
         if (players.size() < maxPlayers) {
-            players.add(user);
+            players.add(new AbstractMap.SimpleEntry<>(user, false));
         }
         return maxPlayers - players.size();
     }
 
     public void exitFromLobby(User user){
-        players.remove(user);
+        players.removeIf((obj) -> obj.getKey().equals(user));
+    }
+
+    public void readyUser(User user) {
+        for (Map.Entry<User, Boolean> pair : players) {
+            if (pair.getKey().equals(user)){
+                pair.setValue(true);
+            }
+        }
     }
 
     public String getName() {
@@ -59,13 +66,21 @@ public class Lobby {
         return timeWrite;
     }
 
-    public List<User> getPlayers() {
+    public List<Map.Entry<User, Boolean>> getPlayers() {
         return players;
     }
 
     public Game startGame(PackManager packManager){
         Pack pack = packManager.getPackWithId(packId).complex(easy, middle, hard);
-        return new Game(players, pack.getQuestion(pack.getCategories(new Random().nextInt(2) + 5), 7), timeRead, timeWrite);
+
+        List<User> users = new ArrayList<>();
+
+        for (Map.Entry<User, Boolean> pair : players) {
+            users.add(pair.getKey());
+            if (!pair.getValue()) return null;
+        }
+
+        return new Game(users, pack.getQuestion(pack.getCategories(new Random().nextInt(2) + 5), 7), timeRead, timeWrite);
     }
 
     public JsonObject toJson(){

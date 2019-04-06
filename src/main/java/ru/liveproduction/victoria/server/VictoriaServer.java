@@ -6,22 +6,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.sun.net.httpserver.*;
 import javafx.util.Pair;
-import jdk.nashorn.internal.parser.JSONParser;
-import ru.liveproduction.victoria.api.Game;
 import ru.liveproduction.victoria.api.Lobby;
 import ru.liveproduction.victoria.api.User;
-import sun.plugin2.main.server.HeartbeatThread;
 
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 public class VictoriaServer {
     private HttpServer server;
     List<Pair<Long, Pair<User, HttpExchange>>> connectionUser = new ArrayList<>();
@@ -212,6 +204,30 @@ public class VictoriaServer {
                                 }
                             } else
                                 writeToStream(httpExchange, createError(6, "Please chouse lobby").toString());
+                            break;
+
+                            // Ready
+                        case 7:
+                            try {
+                                gameManager.userReady(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())));
+                                writeToStream(httpExchange, createResponse("Success").toString());
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                writeToStream(httpExchange, createError(12, "SQLERROR").toString());
+                            }
+                            break;
+
+                            //Unready
+                        case 8:
+                            try {
+                                gameManager.userUnReady(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())));
+                                writeToStream(httpExchange, createResponse("Success").toString());
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                writeToStream(httpExchange, createError(12, "SQLERROR").toString());
+                            }
+
+                            break;
                     }
                 } else {
                     if (httpExchange.getPrincipal() != null && httpExchange.getPrincipal().getRealm() != null) {

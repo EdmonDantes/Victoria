@@ -100,4 +100,26 @@ public class GameManager {
         }
         return false;
     }
+
+    public void userReady(User user) {
+        for (Lobby lobby : lobbes) {
+            for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()){
+                if (tmp.getKey().equals(user)){
+                    tmp.setValue(true);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void userUnReady(User user) {
+        for (Lobby lobby : lobbes) {
+            for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()){
+                if (tmp.getKey().equals(user)){
+                    tmp.setValue(false);
+                    return;
+                }
+            }
+        }
+    }
 }
