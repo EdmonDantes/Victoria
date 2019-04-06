@@ -53,12 +53,9 @@ public class GameManager {
 
     public boolean addUserToLobby(String name, User user) {
         for (Lobby lobby : lobbes) {
-            if (lobby.getName().equals(name))
-                if (lobby.addUserToLobby(user) == 0){
-                    games.add(lobby.startGame(packManager));
-                    lobbes.remove(lobby);
-                    return true;
-                }
+            if (lobby.getName().equals(name)) {
+                return lobby.addUserToLobby(user) >= 0;
+            }
         }
 
         return false;
@@ -103,11 +100,9 @@ public class GameManager {
 
     public void userReady(User user) {
         for (Lobby lobby : lobbes) {
-            for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()){
-                if (tmp.getKey().equals(user)){
-                    tmp.setValue(true);
-                    return;
-                }
+            if (lobby.readyUser(user)) {
+                games.add(lobby.startGame(packManager));
+                lobbes.remove(lobby);
             }
         }
     }
