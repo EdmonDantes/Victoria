@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Victoria.iml" filepath="$PROJECT_DIR$/.idea/Victoria.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Victoria.Victoria.iml" filepath="$PROJECT_DIR$/.idea/modules/Victoria.Victoria.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Victoria.Victoria.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Victoria.Victoria.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Victoria.Victoria.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Victoria.Victoria.test.iml" />
     </modules>
   </component>
 </project>

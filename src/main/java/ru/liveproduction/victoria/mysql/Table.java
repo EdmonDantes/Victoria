@@ -16,6 +16,4 @@ public class Table<T> {
         this.name = name;
         this.columns = columns;
     }
-
-    public
 }
