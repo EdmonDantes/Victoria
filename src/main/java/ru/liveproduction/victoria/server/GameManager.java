@@ -33,9 +33,10 @@ public class GameManager {
         lobbes = new ArrayList<>();
     }
 
-    public int createLobby(String name, int maxPlayers, int timeRead, int timeWrite, int id_park) {
+    public int createLobby(String name, int maxPlayers, int timeRead, int timeWrite, int id_park, boolean easy, boolean middle, boolean hard) {
+        if (lobbes.stream().anyMatch((obj) -> obj.getName().equals(name))) return -1;
         int tmp = gameId++;
-        lobbes.add(new Lobby(name, id_park, maxPlayers, timeWrite, timeRead));
+        lobbes.add(new Lobby(name, id_park, maxPlayers, timeWrite, timeRead, easy, middle, hard));
         return tmp;
     }
 
@@ -63,6 +64,16 @@ public class GameManager {
         return false;
     }
 
+    public boolean deleteUserFromLobby(String name, User user) {
+        for (Lobby lobby : lobbes) {
+            if (lobby.getName().equals(name)) {
+                lobby.exitFromLobby(user);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public User createUserForRequest() {
         return userManager.createUserForRequest();
@@ -78,5 +89,15 @@ public class GameManager {
 
     public boolean checkMarket(Integer valueOf, int packId) {
         return userManager.checkMarket(valueOf, packId);
+    }
+
+    public boolean deleteLobby(String name, User userFromId) {
+        for (Lobby lobby : lobbes) {
+            if (lobby.getName().equals(name) && lobby.getPlayers().get(0).equals(userFromId)) {
+                lobbes.remove(lobby);
+                return true;
+            }
+        }
+        return false;
     }
 }

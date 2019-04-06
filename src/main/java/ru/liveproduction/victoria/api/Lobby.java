@@ -1,8 +1,6 @@
 package ru.liveproduction.victoria.api;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ru.liveproduction.victoria.server.GameManager;
 import ru.liveproduction.victoria.server.PackManager;
 
 import java.util.ArrayList;
@@ -16,14 +14,18 @@ public class Lobby {
     int timeRead;
     int timeWrite;
     List<User> players;
+    boolean easy, middle, hard;
 
-    public Lobby(String name, int packId, int maxPlayers, int timeWrite, int timeRead) {
+    public Lobby(String name, int packId, int maxPlayers, int timeWrite, int timeRead, boolean easy, boolean middle, boolean hard) {
         this.name = name;
         this.packId = packId;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>(maxPlayers);
         this.timeRead = timeRead;
         this.timeWrite = timeWrite;
+        this.easy = easy;
+        this.middle = middle;
+        this.hard = hard;
     }
 
     public int addUserToLobby(User user) {
@@ -62,7 +64,7 @@ public class Lobby {
     }
 
     public Game startGame(PackManager packManager){
-        Pack pack = packManager.getPackWithId(packId);
+        Pack pack = packManager.getPackWithId(packId).complex(easy, middle, hard);
         return new Game(players, pack.getQuestion(pack.getCategories(new Random().nextInt(2) + 5), 7), timeRead, timeWrite);
     }
 

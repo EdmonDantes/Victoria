@@ -125,8 +125,16 @@ public class VictoriaServer {
                         case 0:
                             if (data.has("name") && data.has("countPlayers") && data.has("packId") && data.has("complex") && data.has("timeRead") && data.has("timeWrite") && data.has("userId") && data.has("token")) {
                                 if (gameManager.checkMarket(Integer.valueOf(httpExchange.getPrincipal().getRealm()), data.get("packId").getAsInt())) {
-                                    int id = gameManager.createLobby(data.get("name").getAsString(), data.get("countPlayers").getAsInt(), data.get("timeRead").getAsInt(), data.get("timeWrite").getAsInt(), data.get("packId").getAsInt());
-                                    writeToStream(httpExchange, createResponse(id).toString());
+                                    JsonObject complex = data.getAsJsonObject("complex");
+                                    int id = gameManager.createLobby(data.get("name").getAsString(), data.get("countPlayers").getAsInt(),
+                                            data.get("timeRead").getAsInt(), data.get("timeWrite").getAsInt(), data.get("packId").getAsInt(),
+                                            complex.has("easy") && complex.get("easy").getAsBoolean(),
+                                            complex.has("middle") && complex.get("middle").getAsBoolean(),
+                                            complex.has("hard") && complex.get("hard").getAsBoolean());
+                                    if (id < 0)
+                                        writeToStream(httpExchange, createError(7, "This name have used yet").toString());
+                                    else
+                                        writeToStream(httpExchange, createResponse(id).toString());
                                 } else {
                                     writeToStream(httpExchange, createError(3, "You must buy this pack").toString());
                                 }
@@ -162,9 +170,48 @@ public class VictoriaServer {
                         case 4:
                             if (data.has("nameLobby")){
                                 try {
-                                    gameManager.addUserToLobby(data.get("nameLobby").getAsString(), gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())));
-                                } catch (SQLException e) {}
-                            }
+                                    if (gameManager.addUserToLobby(data.get("nameLobby").getAsString(), gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())))){
+                                        writeToStream(httpExchange, createResponse("Success").toString());
+                                    }else {
+                                        writeToStream(httpExchange, createError(4, "Not ehouh free space").toString());
+                                    }
+                                } catch (SQLException e) {
+                                    writeToStream(httpExchange, createError(5, "SQLERROR").toString());
+                                }
+                            } else
+                                writeToStream(httpExchange, createError(6, "Please chouse lobby").toString());
+                            break;
+
+                            // Exit from lobby
+                        case 5:
+                            if (data.has("nameLobby")) {
+                                try {
+                                    if (gameManager.deleteUserFromLobby(data.get("nameLobby").getAsString(), gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())))){
+                                        writeToStream(httpExchange, createResponse("Success").toString());
+                                    } else{
+                                        writeToStream(httpExchange, createError(4, "Not ehouh free space").toString());
+                                    }
+                                }catch (Exception e){
+                                    writeToStream(httpExchange, createError(5, "SQLERROR").toString());
+                                }
+                            }else
+                                writeToStream(httpExchange, createError(6, "Please chouse lobby").toString());
+                            break;
+
+                            // Delete lobby
+                        case 6:
+                            if (data.has("nameLobby")) {
+                                try {
+                                    if (gameManager.deleteLobby(data.get("nameLobby").getAsString(), gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())))){
+                                        writeToStream(httpExchange, createResponse("Success").toString());
+                                    } else {
+                                        writeToStream(httpExchange, createError(4, "Not ehouh free space").toString());
+                                    }
+                                } catch (SQLException e) {
+                                    writeToStream(httpExchange, createError(5, "SQLERROR").toString());
+                                }
+                            } else
+                                writeToStream(httpExchange, createError(6, "Please chouse lobby").toString());
                     }
                 } else {
                     if (httpExchange.getPrincipal() != null && httpExchange.getPrincipal().getRealm() != null) {
