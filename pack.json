@@ -1,0 +1,21 @@
+{
+  "packManager":[
+    {
+      "id":1,
+      "categories":[
+        {
+          "name":"Hello",
+          "question":[
+            {
+              "question":"kjashashf",
+              "price":100,
+              "answers":[
+                "124", "sto dvatcati chetire"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

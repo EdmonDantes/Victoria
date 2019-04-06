@@ -26,8 +26,6 @@ public class VictoriaServer {
     private HttpServer server;
     List<Pair<Long, Pair<User, HttpExchange>>> connectionUser = new ArrayList<>();
     private GameManager gameManager;
-    private UserManager userManager;
-    private PackManager packManager;
 
     private static String convert(InputStream inputStream) throws IOException {
 
@@ -87,14 +85,14 @@ public class VictoriaServer {
                 JsonObject object = new JsonParser().parse(convert(httpExchange.getRequestBody())).getAsJsonObject();
 
                 if (object.has("typeRequest") && object.get("typeRequest").getAsInt() == 2) {
-                    User user = userManager.createUserForRequest();
+                    User user = gameManager.createUserForRequest();
                     return new Success(new HttpPrincipal(object.toString(), String.valueOf(user.getId())));
                 }
 
                 if (object.has("data")) {
                     JsonObject data = object.getAsJsonObject("data");
                     if (data.has("userId") && data.has("token")) {
-                        if (userManager.getUserFromId(data.get("userId").getAsInt()).getIdentify().equals(data.get("token").getAsString()))
+                        if (gameManager.getUserFromId(data.get("userId").getAsInt()).getIdentify().equals(data.get("token").getAsString()))
                             return new Success(new HttpPrincipal(object.toString(), data.get("userId").getAsString()));
                     } else return new Failure(401);
                 }
@@ -111,8 +109,6 @@ public class VictoriaServer {
 
     public VictoriaServer() throws FileNotFoundException {
         gameManager = new GameManager();
-        userManager = new UserManager();
-        packManager = new PackManager("/home/dantes/IdeaProjects/Victoria/pack.json");
         try {
             server = HttpServer.create();
             server.bind(new InetSocketAddress(8080),0);
@@ -128,7 +124,7 @@ public class VictoriaServer {
                         //Create lobby
                         case 0:
                             if (data.has("name") && data.has("countPlayers") && data.has("packId") && data.has("complex") && data.has("timeRead") && data.has("timeWrite") && data.has("userId") && data.has("token")) {
-                                if (userManager.checkMarket(Integer.valueOf(httpExchange.getPrincipal().getRealm()), data.get("packId").getAsInt())) {
+                                if (gameManager.checkMarket(Integer.valueOf(httpExchange.getPrincipal().getRealm()), data.get("packId").getAsInt())) {
                                     int id = gameManager.createLobby(data.get("name").getAsString(), data.get("countPlayers").getAsInt(), data.get("timeRead").getAsInt(), data.get("timeWrite").getAsInt(), data.get("packId").getAsInt());
                                     writeToStream(httpExchange, createResponse(id).toString());
                                 } else {
@@ -141,12 +137,12 @@ public class VictoriaServer {
 
                             // Get packs
                         case 1:
-                            writeToStream(httpExchange, createResponse(packManager.toJson()).toString());
+                            writeToStream(httpExchange, createResponse(gameManager.getPackManager()).toString());
                             break;
                             // Register
                         case 2:
                             try {
-                                writeToStream(httpExchange, String.valueOf(userManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())).toJson(true).toString()));
+                                writeToStream(httpExchange, String.valueOf(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())).toJson(true).toString()));
                             } catch (SQLException e) {
                                 e.printStackTrace();
                             }
@@ -157,21 +153,23 @@ public class VictoriaServer {
                             JsonArray array = new JsonArray();
                             List<Lobby> collections = gameManager.getLoddyes(data.has("nameLobby") ? data.get("nameLobby").getAsString() : "");
                             for (Lobby lobby : collections) {
-                                array.add(lobby.toJSON());
+                                array.add(lobby.toJson());
                             }
                             writeToStream(httpExchange, createResponse(array).toString());
                             break;
 
                             // Add to lobby
                         case 4:
-                            if (data.has("idLobby")){
-
+                            if (data.has("nameLobby")){
+                                try {
+                                    gameManager.addUserToLobby(data.get("nameLobby").getAsString(), gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())));
+                                } catch (SQLException e) {}
                             }
                     }
                 } else {
                     if (httpExchange.getPrincipal() != null && httpExchange.getPrincipal().getRealm() != null) {
                         try {
-                            writeToStream(httpExchange, String.valueOf(userManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())).toJson(true).toString()));
+                            writeToStream(httpExchange, String.valueOf(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())).toJson(true).toString()));
                         } catch (SQLException e) {
                             writeToStream(httpExchange, createError(500, "Server error").toString());
                             e.printStackTrace();

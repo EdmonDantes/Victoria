@@ -1,5 +1,6 @@
 package ru.liveproduction.victoria.server;
 
+import com.google.gson.JsonObject;
 import javafx.util.Pair;
 import ru.liveproduction.victoria.api.Game;
 import ru.liveproduction.victoria.api.Lobby;
@@ -7,12 +8,14 @@ import ru.liveproduction.victoria.api.User;
 
 import javax.jws.soap.SOAPBinding;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class GameManager {
 
     private volatile int gameId = 0;
     PackManager packManager;
+    UserManager userManager = new UserManager();
 
     {
         try {
@@ -51,7 +54,7 @@ public class GameManager {
         for (Lobby lobby : lobbes) {
             if (lobby.getName().equals(name))
                 if (lobby.addUserToLobby(user) == 0){
-                    games.add(lobby.startGame(manager));
+                    games.add(lobby.startGame(packManager));
                     lobbes.remove(lobby);
                     return true;
                 }
@@ -61,5 +64,19 @@ public class GameManager {
     }
 
 
+    public User createUserForRequest() {
+        return userManager.createUserForRequest();
+    }
 
+    public User getUserFromId(int userId) throws SQLException {
+        return userManager.getUserFromId(userId);
+    }
+
+    public JsonObject getPackManager(){
+        return packManager.toJson();
+    }
+
+    public boolean checkMarket(Integer valueOf, int packId) {
+        return userManager.checkMarket(valueOf, packId);
+    }
 }

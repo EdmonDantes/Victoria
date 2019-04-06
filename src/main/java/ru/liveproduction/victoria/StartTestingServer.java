@@ -20,14 +20,7 @@ import java.sql.SQLException;
 
 public class StartTestingServer {
 
-    private static final String url = "jdbc:mysql://localhost:3306/victoriadb?useUnicode=true&characterEncoding=UTF-8";
-    private static final String user = "root";
-    private static final String password = "1111qazwsxqweasd";
-    private final static MysqlManager manager = new MysqlManager(15, url, user, password);
-
     public static void main(String ...args) throws ClassNotFoundException, SQLException, IOException {
-
-        MysqlManager.printResult.exec(manager.addTaskAsyncGet("select * from `users` where `id` = \'" + 1 + "\';"), 0, null);
         new VictoriaServer();
     }
 }
