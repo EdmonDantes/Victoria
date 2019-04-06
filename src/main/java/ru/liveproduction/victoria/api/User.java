@@ -7,15 +7,24 @@ Created dantes on 05.04.19 22:33
 
 package ru.liveproduction.victoria.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
 
     private int id;
     private String name;
-    private String macAddress;
+    private String identify;
     private List<Integer> packsIds;
     private long registerTime;
+
+    public User(int id, String name, String identify, long regTime) {
+        this.id = id;
+        this.name = name;
+        this.identify = identify;
+        this.registerTime = regTime;
+        packsIds = new ArrayList<>();
+    }
 
     public int getId(){
         return id;
@@ -25,8 +34,8 @@ public class User {
         return name;
     }
 
-    public String getMacAddress(){
-        return macAddress;
+    public String getIdentify(){
+        return identify;
     }
 
     public boolean isPackAdded(int packId) {
