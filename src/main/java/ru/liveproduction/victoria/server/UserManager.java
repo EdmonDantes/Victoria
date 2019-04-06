@@ -14,8 +14,8 @@ public class UserManager {
     private final static MysqlManager manager = new MysqlManager(15, url, user, password);
     private final static Random rand = new Random();
     static {
-        manager.addTaskAsyncUpdate("create table if not exists `users`(`id` integer unsigned auto_increment, `name` varchar(17) binary, `indentify` varchar(128), `date` integer unsigned, primary key (`id`));");
-        manager.addTaskAsyncUpdate("create table if not exists 'market`(`id_user` integer unsigned, `id_pack` integer unsigned, primary key(id_user));");
+        manager.addTaskAsyncUpdate("create table if not exists `users`(`id` integer unsigned auto_increment, `name` varchar(17) binary, `token` varchar(128), `date` integer unsigned, primary key (`id`), unique key(`token`));");
+        manager.addTaskAsyncUpdate("create table if not exists `market`(`id_user` integer unsigned, `id_pack` integer unsigned, primary key (`id_user`));");
     }
 
     public UserManager(){}
@@ -24,17 +24,33 @@ public class UserManager {
         return "player" + rand.nextInt();
     }
 
-    public User createUserForRequest(String identify){
+    private static String createToken() {
+        StringBuilder stringBuilder = new StringBuilder();
+        while (stringBuilder.length() < 128)
+            stringBuilder.append(rand.nextInt());
+        return stringBuilder.substring(0, 128).toString();
+    }
+
+    public User createUserForRequest(){
         String name = createName();
+        String token = createToken();
         long date = System.currentTimeMillis();
-        int id = manager.addTaskAsyncUpdate("insert into `users`(`name`,`indentify`, `date`) values(\'" + name + "\',\'" + identify + "\',\'" + date + "\');");
-        return new User(id, name, identify, date);
+        manager.addTaskAsyncUpdate("insert into `users`(`name`,`token`, `date`) values(\'" + name + "\',\'" + token + "\',\'" + date / 1000 + "\');");
+        ResultSet rs = manager.addTaskAsyncGet("select `id` from `users` where `token` = \'" + token + "\';");
+        try {
+            rs.next();
+            return new User(rs.getInt("id"), name, token, date);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public User getUserFromId(int id) throws SQLException {
         ResultSet rs = manager.addTaskAsyncGet("select * from `users` where `id` = \'" + id + "\';");
-        if (rs != null)
-            return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getLong(4));
+        assert rs != null;
+        if (rs.next())
+            return new User(rs.getInt("id"), rs.getString("name"), rs.getString("token"), rs.getLong("date"));
         return null;
     }
 
