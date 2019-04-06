@@ -3,11 +3,12 @@ package ru.liveproduction.victoria.api;
 import java.util.List;
 
 public class Game {
+    String name;
+    int maxPlayers;
     List<User> users;
-    int index_play_user;
-    int max_user;
-    Pack pack_q;
-    int time_read;
-    int time_write;
+    int indexUser;
+    Pack pack;
+    int timeRead;
+    int timeWrite;
 
 }
