@@ -2,7 +2,6 @@ package ru.liveproduction.victoria.api;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import javafx.util.Pair;
 
 import java.util.*;
 
@@ -25,9 +24,9 @@ public class Pack {
         for (Map.Entry<String, List<Question>> tmp : data.entrySet()) {
             List<Question> result0 = new LinkedList<>();
             for (Question question : tmp.getValue()){
-                if (easy && question.getPrice() > 0 && question.getPrice() <= 15) result0.add(question);
-                else if (middle && question.getPrice() > 15 && question.getPrice() <= 40) result0.add(question);
-                else if (hard && question.getPrice() > 40 && question.getPrice() <= 100) result0.add(question);
+                if (easy && question.getPrice() > 0 && question.getPrice() <= 40) result0.add(question);
+                else if (middle && question.getPrice() > 40 && question.getPrice() <= 80) result0.add(question);
+                else if (hard && question.getPrice() > 80 && question.getPrice() <= 100) result0.add(question);
             }
 
             if (result0.size() > 0) {
@@ -59,9 +58,9 @@ public class Pack {
         return result;
     }
 
-    public List<Pair<String, List<Question>>> getQuestion(List<String> categories, int count) {
+    public List<Map.Entry<String, List<Question>>> getQuestion(List<String> categories, int count) {
         Random random = new Random();
-        List<Pair<String, List<Question>>> result = new ArrayList<>();
+        List<Map.Entry<String, List<Question>>> result = new ArrayList<>();
         for (String str : categories) {
             Set<Integer> numbers = new TreeSet<>();
             List<Question> tmp = new ArrayList<>();
@@ -76,7 +75,7 @@ public class Pack {
             }
 
             if (tmp.size() > 0) {
-                result.add(new Pair<>(str, tmp));
+                result.add(new AbstractMap.SimpleEntry<>(str, tmp));
             }
         }
 

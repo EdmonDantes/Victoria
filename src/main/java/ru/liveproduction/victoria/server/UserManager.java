@@ -8,17 +8,15 @@ import java.sql.SQLException;
 import java.util.Random;
 
 public class UserManager {
-    private static final String url = "jdbc:mysql://localhost:3306/victoriadb?useUnicode=true&characterEncoding=UTF-8";
-    private static final String user = "root";
-    private static final String password = "1111qazwsxqweasd";
-    private final static MysqlManager manager = new MysqlManager(15, url, user, password);
+
+    private static MysqlManager manager;
     private final static Random rand = new Random();
-    static {
+
+    public UserManager(String url, String user, String password){
+        manager = new MysqlManager(15, url, user, password);
         manager.addTaskAsyncUpdate("create table if not exists `users`(`id` integer unsigned auto_increment, `name` varchar(17) binary, `token` varchar(128), `date` integer unsigned, primary key (`id`), unique key(`token`));");
         manager.addTaskAsyncUpdate("create table if not exists `market`(`id_user` integer unsigned, `id_pack` integer unsigned, primary key (`id_user`));");
     }
-
-    public UserManager(){}
 
     private String createName(){
         return "player" + rand.nextInt();

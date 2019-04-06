@@ -1,34 +1,39 @@
 package ru.liveproduction.victoria.server;
 
 import com.google.gson.JsonObject;
-import javafx.util.Pair;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import ru.liveproduction.victoria.api.Action;
 import ru.liveproduction.victoria.api.Game;
 import ru.liveproduction.victoria.api.Lobby;
 import ru.liveproduction.victoria.api.User;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.function.Function;
 
 public class GameManager {
 
-    private volatile int gameId = 0;
-    PackManager packManager;
-    UserManager userManager = new UserManager();
-
-    {
-        try {
-            packManager = new PackManager("/home/dantes/IdeaProjects/Victoria/pack.json");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public interface AnswerToUser{
+        void send(User user, Action action);
     }
 
+    private volatile int gameId = 0;
+    PackManager packManager;
+    UserManager userManager;
     List<Game> games;
     List<Lobby> lobbes;
 
-    public GameManager(){
+    AnswerToUser ans;
+
+    public GameManager(AnswerToUser ans, String url, String user, String password, String pack){
+        try {
+            packManager = new PackManager(pack);
+            userManager = new UserManager(url, user, password);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.ans = ans;
         games = new ArrayList<>();
         lobbes = new ArrayList<>();
     }
@@ -60,7 +65,14 @@ public class GameManager {
     public boolean addUserToLobby(String name, User user) {
         for (Lobby lobby : lobbes) {
             if (lobby.getName().equals(name)) {
-                return lobby.addUserToLobby(user) >= 0;
+                if (lobby.addUserToLobby(user) >= 0) {
+                    for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()){
+                        Action act = new Action(Action.Type.EnterToLobby, user);
+                        if (!tmp.getKey().equals(user))
+                            this.ans.send(tmp.getKey(), act);
+                    }
+                } else
+                    return false;
             }
         }
 
@@ -72,6 +84,11 @@ public class GameManager {
             if (lobby.getName().equals(name)) {
                 if (!lobby.exitFromLobby(user)){
                     lobbes.remove(lobby);
+                }
+                for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()) {
+                    Action act = new Action(Action.Type.ExitFromLobby, user);
+                    if (!tmp.getKey().equals(user))
+                        this.ans.send(tmp.getKey(), act);
                 }
                 return true;
             }
@@ -100,6 +117,11 @@ public class GameManager {
         for (Lobby lobby : lobbes) {
             if (lobby.getName().equals(name) && lobby.getOwner() == userFromId.getId()) {
                 lobbes.remove(lobby);
+                for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()) {
+                    Action act = new Action(Action.Type.DeleteLobby, userFromId);
+                    if (!tmp.getKey().equals(userFromId))
+                        this.ans.send(tmp.getKey(), act);
+                }
                 return true;
             }
         }
@@ -109,7 +131,17 @@ public class GameManager {
     public void userReady(User user) {
         for (Lobby lobby : lobbes) {
             if (lobby.readyUser(user)) {
-                games.add(lobby.startGame(packManager));
+                Game game = lobby.startGame(packManager);
+                games.add(game);
+                Action act = new Action(Action.Type.StartGame, user, game.toJSON().toString());
+                Action act0 = new Action(Action.Type.Ready, user);
+                for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()) {
+                    if (!tmp.getKey().equals(user)) {
+                        this.ans.send(tmp.getKey(), act0);
+                        this.ans.send(tmp.getKey(), act);
+                    }
+                }
+
                 lobbes.remove(lobby);
             }
         }
@@ -120,7 +152,32 @@ public class GameManager {
             for (Map.Entry<User, Boolean> tmp : lobby.getPlayers()){
                 if (tmp.getKey().equals(user)){
                     tmp.setValue(false);
+                    Action act = new Action(Action.Type.Unready, user);
+                    for (Map.Entry<User, Boolean> tmp0 : lobby.getPlayers()) {
+                        if (!tmp0.getKey().equals(user))
+                            this.ans.send(tmp0.getKey(), act);
+                    }
                     return;
+                }
+            }
+        }
+    }
+
+    public void choseCell(User user, int x, int y) {
+        for (Game game : games) {
+            if (game.getStarting().equals(user)) {
+                game.getQuestion(ans, x, y, user);
+                return;
+            }
+        }
+    }
+
+    public void answer(User user, String answer) {
+        for (Game game : games) {
+
+            for (Map.Entry<User, Integer> map : game.getPlayers()) {
+                if (map.getKey().equals(user)) {
+                    game.answer(user, answer);
                 }
             }
         }

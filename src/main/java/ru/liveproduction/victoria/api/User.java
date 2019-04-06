@@ -52,13 +52,17 @@ public class User {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
         jsonObject.addProperty("name", name);
-        jsonObject.addProperty("token", token);
+        if (useToken)
+            jsonObject.addProperty("token", token);
         jsonObject.addProperty("registerTime", registerTime);
         return jsonObject;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return id == id;
+        if (obj instanceof User)
+            return this.id == ((User) obj).id;
+        else
+            return false;
     }
 }

@@ -36,7 +36,7 @@ public class Question {
         String ansClientTrim = answer.replace(" ", "");
         for (String ans : answers) {
             String ansTrim = ans.replace(" ", "");
-            if (ansTrim.length() != ansClientTrim.length()) return false;
+            if (ansTrim.length() != ansClientTrim.length()) continue;
             int countWrongChar = 0;
             for (int i = 0; i < ansTrim.length(); i++) {
                 if (ansTrim.charAt(i) != ansClientTrim.charAt(i)) countWrongChar++;

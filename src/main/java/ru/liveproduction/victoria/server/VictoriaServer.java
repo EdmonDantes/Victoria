@@ -99,8 +99,10 @@ public class VictoriaServer {
 
     private static volatile Map<Integer, HttpExchange> longConnections = new TreeMap<>();
 
-    public VictoriaServer() throws FileNotFoundException {
-        gameManager = new GameManager();
+    public VictoriaServer(String url, String _user, String password, String park) throws FileNotFoundException {
+        gameManager = new GameManager(((user, action) -> {
+            writeToStream(longConnections.get(user.getId()), action.toJson().toString());
+        }), url, _user, password, park);
         try {
             server = HttpServer.create();
             server.bind(new InetSocketAddress(8080),0);
@@ -228,6 +230,26 @@ public class VictoriaServer {
                             }
 
                             break;
+
+                            // Chose
+                         case 9:
+                             try {
+                                 gameManager.choseCell(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())), data.get("x").getAsInt(), data.get("x").getAsInt());
+                                 writeToStream(httpExchange, createResponse("Success").toString());
+                             } catch (SQLException e) {
+                                 e.printStackTrace();
+                                 writeToStream(httpExchange, createError(12, "SQLERROR").toString());
+                             }
+                             break;
+                         case 10:
+                             try {
+                                 gameManager.answer(gameManager.getUserFromId(Integer.valueOf(httpExchange.getPrincipal().getRealm())), data.get("answer").getAsString());
+                                 writeToStream(httpExchange, createResponse("Success").toString());
+                             } catch (SQLException e) {
+                                 e.printStackTrace();
+                                 writeToStream(httpExchange, createError(12, "SQLERROR").toString());
+                             }
+                             break;
                     }
                 } else {
                     if (httpExchange.getPrincipal() != null && httpExchange.getPrincipal().getRealm() != null) {

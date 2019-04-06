@@ -16,7 +16,6 @@ public class Lobby {
     int timeWrite;
     int owner;
     List<Map.Entry<User, Boolean>> players;
-    Map<User, Map.Entry<Integer, Long>> actions;
     boolean easy, middle, hard;
 
     public Lobby(String name, int packId, int maxPlayers, int timeWrite, int timeRead, boolean easy, boolean middle, boolean hard, int owner) {
@@ -24,7 +23,6 @@ public class Lobby {
         this.packId = packId;
         this.maxPlayers = maxPlayers;
         this.players = new ArrayList<>(maxPlayers);
-        this.actions = new HashMap<>();
         this.timeRead = timeRead;
         this.timeWrite = timeWrite;
         this.easy = easy;
@@ -44,13 +42,11 @@ public class Lobby {
             }
             players.add(new AbstractMap.SimpleEntry<>(user, false));
         }
-        actions.put(user, new AbstractMap.SimpleEntry<>(4, System.currentTimeMillis()));
         return maxPlayers - players.size();
     }
 
     public boolean exitFromLobby(User user){
         players.removeIf((obj) -> obj.getKey().equals(user));
-        actions.put(user, new AbstractMap.SimpleEntry<>(5, System.currentTimeMillis()));
         return players.size() > 0;
     }
 
@@ -58,7 +54,6 @@ public class Lobby {
         for (Map.Entry<User, Boolean> pair : players) {
             if (pair.getKey().equals(user)){
                 pair.setValue(true);
-                actions.put(user, new AbstractMap.SimpleEntry<>(7, System.currentTimeMillis()));
                 return true;
             }
         }
@@ -96,11 +91,10 @@ public class Lobby {
 
         for (Map.Entry<User, Boolean> pair : players) {
             users.add(pair.getKey());
-            actions.put(pair.getKey(), new AbstractMap.SimpleEntry<>(10, System.currentTimeMillis()));
             if (!pair.getValue()) return null;
         }
 
-        return new Game(users, pack.getQuestion(pack.getCategories(new Random().nextInt(maxPlayers / 2) + maxPlayers), 7), timeRead, timeWrite);
+        return new Game(users, pack.getQuestion(pack.getCategories(5), 5), timeRead, timeWrite);
     }
 
     public JsonObject toJson(){

@@ -7,20 +7,18 @@ Created dantes on 05.04.19 22:45
 
 package ru.liveproduction.victoria;
 
-import com.sun.net.httpserver.HttpServer;
-import ru.liveproduction.victoria.api.Pack;
-import ru.liveproduction.victoria.mysql.MysqlConnection;
-import ru.liveproduction.victoria.mysql.MysqlManager;
-import ru.liveproduction.victoria.server.PackManager;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import ru.liveproduction.victoria.server.VictoriaServer;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.sql.SQLException;
 
 public class StartTestingServer {
 
     public static void main(String ...args) throws ClassNotFoundException, SQLException, IOException {
-        new VictoriaServer();
+        JsonObject pref = new JsonParser().parse(new FileReader(args[0])).getAsJsonObject();
+        new VictoriaServer(pref.get("url").getAsString(), pref.get("user").getAsString(), pref.get("password").getAsString(), pref.get("pack").getAsString());
     }
 }
