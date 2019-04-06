@@ -7,6 +7,7 @@ Created dantes on 05.04.19 22:45
 
 package ru.liveproduction.victoria;
 
+import ru.liveproduction.victoria.mysql.MysqlConnection;
 import ru.liveproduction.victoria.mysql.MysqlManager;
 
 import java.sql.SQLException;

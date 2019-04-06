@@ -7,6 +7,8 @@ Created dantes on 06.04.19 1:30
 
 package ru.liveproduction.victoria.mysql;
 
+import javafx.util.Pair;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,35 +18,38 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class MysqlConnection {
+
+    public enum Type {
+        UPDATE,
+        GET
+    }
+
     private volatile Connection mysqlConnection;
     private volatile Thread threadConnection;
     private volatile long sleepTimeInMs = 100;
     private volatile boolean startThread = true;
     private volatile boolean useConnection = false;
-    private volatile Queue<Map.Entry<String, Long>> query;
-    private volatile Map<Long, ResultRunnable> runnables;
-    private volatile Map<Long, ResultSet> results;
-
-    private static volatile long endResultId = 0;
+    private volatile Queue<Pair<Type, Pair<String, ResultRunnable>>> query;
 
     public MysqlConnection(String url, String user, String password) throws SQLException {
         query = new LinkedBlockingQueue<>();
-        runnables = new HashMap<>();
-        results = new HashMap<>();
         mysqlConnection = DriverManager.getConnection(url, user, password);
         threadConnection = new Thread(() -> {
             try {
                 while (startThread) {
                     useConnection = true;
                     while (query.size() > 0) {
-                        Map.Entry<String, Long> pair = query.poll();
+                        Pair<Type, Pair<String, ResultRunnable>> pair = query.poll();
                         assert pair != null;
-                        ResultSet rs = mysqlConnection.prepareStatement(pair.getKey()).executeQuery();
-                        ResultRunnable run = runnables.get(pair.getValue());
-                        if (run == null || !run.exec(rs, pair.getValue(), threadConnection)){
-                            results.put(pair.getValue(), rs);
+                        if (pair.getKey() == Type.GET) {
+                            ResultSet rs = mysqlConnection.prepareStatement(pair.getValue().getKey()).executeQuery();
+                            pair.getValue().getValue().exec(rs, 0, threadConnection);
+                        } else {
+                            int answer = mysqlConnection.prepareStatement(pair.getValue().getKey()).executeUpdate();
+                            pair.getValue().getValue().exec(null, answer, threadConnection);
                         }
                     }
                     useConnection = false;
@@ -70,21 +75,12 @@ public final class MysqlConnection {
         this.sleepTimeInMs = sleepTimeInMs;
     }
 
-    public long addTask(String query){
-        long tmp = endResultId++;
-        this.query.add(new AbstractMap.SimpleEntry<>(query, tmp));
-        return tmp;
+    public void addTask(String query, ResultRunnable runnable) {
+        this.query.add(new Pair(Type.GET, new Pair<>(query, runnable)));
     }
 
-    public long addTask(String query, ResultRunnable runnable) {
-        long tmp = endResultId++;
-        this.runnables.put(tmp, runnable);
-        this.query.add(new AbstractMap.SimpleEntry<>(query, tmp));
-        return tmp;
-    }
-
-    public ResultSet getResult(long id) {
-        return results.get(id);
+    public void addTask(String query, ResultRunnable run, Type type) {
+        this.query.add(new Pair(type, new Pair<>(query, run)));
     }
 
     public void closeConnection(){

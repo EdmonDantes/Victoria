@@ -11,5 +11,5 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface ResultRunnable{
-    boolean exec(ResultSet results, long id, Thread thread) throws SQLException;
+    boolean exec(ResultSet results, int answer, Thread thread) throws SQLException;
 }
