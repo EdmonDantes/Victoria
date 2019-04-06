@@ -111,7 +111,7 @@ public class VictoriaServer {
 
                 if (object.has("typeRequest") && object.has("data")) {
                     JsonObject data = object.getAsJsonObject("data");
-                    switch (object.get("typeRequest").getAsInt()) {
+                     switch (object.get("typeRequest").getAsInt()) {
 
                         //Create lobby
                         case 0:
@@ -122,7 +122,7 @@ public class VictoriaServer {
                                             data.get("timeRead").getAsInt(), data.get("timeWrite").getAsInt(), data.get("packId").getAsInt(),
                                             complex.has("easy") && complex.get("easy").getAsBoolean(),
                                             complex.has("middle") && complex.get("middle").getAsBoolean(),
-                                            complex.has("hard") && complex.get("hard").getAsBoolean());
+                                            complex.has("hard") && complex.get("hard").getAsBoolean(), Integer.valueOf(httpExchange.getPrincipal().getRealm()));
                                     if (id < 0)
                                         writeToStream(httpExchange, createError(7, "This name have used yet").toString());
                                     else

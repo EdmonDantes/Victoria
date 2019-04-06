@@ -2,6 +2,14 @@ plugins {
     id 'java'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class':'ru.liveproduction.victoria.StartTestingServer'
+        )
+    }
+}
+
 group 'Victoria'
 version 'pre-alpha 0.1'
 

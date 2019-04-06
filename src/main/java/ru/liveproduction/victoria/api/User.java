@@ -56,4 +56,9 @@ public class User {
         jsonObject.addProperty("registerTime", registerTime);
         return jsonObject;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return id == id;
+    }
 }

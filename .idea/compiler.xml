@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="Victoria.main" target="1.8" />
       <module name="Victoria.test" target="1.8" />
+      <module name="Victoria.Victoria.main" target="1.8" />
+      <module name="Victoria.Victoria.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

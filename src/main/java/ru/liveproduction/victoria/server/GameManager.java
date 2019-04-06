@@ -33,10 +33,16 @@ public class GameManager {
         lobbes = new ArrayList<>();
     }
 
-    public int createLobby(String name, int maxPlayers, int timeRead, int timeWrite, int id_park, boolean easy, boolean middle, boolean hard) {
+    public int createLobby(String name, int maxPlayers, int timeRead, int timeWrite, int id_park, boolean easy, boolean middle, boolean hard, int userId) {
         if (lobbes.stream().anyMatch((obj) -> obj.getName().equals(name))) return -1;
         int tmp = gameId++;
-        lobbes.add(new Lobby(name, id_park, maxPlayers, timeWrite, timeRead, easy, middle, hard));
+        Lobby lobby = new Lobby(name, id_park, maxPlayers, timeWrite, timeRead, easy, middle, hard, userId);
+        try {
+            lobby.addUserToLobby(userManager.getUserFromId(userId));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        lobbes.add(lobby);
         return tmp;
     }
 
@@ -64,7 +70,9 @@ public class GameManager {
     public boolean deleteUserFromLobby(String name, User user) {
         for (Lobby lobby : lobbes) {
             if (lobby.getName().equals(name)) {
-                lobby.exitFromLobby(user);
+                if (!lobby.exitFromLobby(user)){
+                    lobbes.remove(lobby);
+                }
                 return true;
             }
         }
@@ -90,7 +98,7 @@ public class GameManager {
 
     public boolean deleteLobby(String name, User userFromId) {
         for (Lobby lobby : lobbes) {
-            if (lobby.getName().equals(name) && lobby.getPlayers().get(0).equals(userFromId)) {
+            if (lobby.getName().equals(name) && lobby.getOwner() == userFromId.getId()) {
                 lobbes.remove(lobby);
                 return true;
             }
