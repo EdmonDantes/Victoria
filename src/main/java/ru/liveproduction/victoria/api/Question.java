@@ -33,9 +33,9 @@ public class Question {
     }
 
     boolean isRigthAnswer(String answer) { // 83%
-        String ansClientTrim = answer.replace(" ", "");
+        String ansClientTrim = answer.replace(" ", "").toLowerCase();
         for (String ans : answers) {
-            String ansTrim = ans.replace(" ", "");
+            String ansTrim = ans.replace(" ", "").toLowerCase();
             if (ansTrim.length() != ansClientTrim.length()) continue;
             int countWrongChar = 0;
             for (int i = 0; i < ansTrim.length(); i++) {

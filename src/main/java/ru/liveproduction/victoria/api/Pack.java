@@ -93,7 +93,7 @@ public class Pack {
             List<Question> tmp0 = new LinkedList<>();
 
             for (int j = 0; j < question.size(); j++) {
-                JsonObject object = question.get(i).getAsJsonObject();
+                JsonObject object = question.get(j).getAsJsonObject();
                 tmp0.add(Question.fromJson(object));
             }
 
