@@ -107,21 +107,23 @@ public class Game {
     }
 
     public void answer(User user, String answer) {
-        if (nowQuestion.isRigthAnswer(answer)) {
-            starting = user;
-            for (Map.Entry<User, Integer> play : players) {
-                if (play.getKey().equals(user)) {
-                    play.setValue(play.getValue() + nowQuestion.getPrice());
-                    return;
+        if (nowQuestion == null) {
+            if (nowQuestion.isRigthAnswer(answer)) {
+                starting = user;
+                for (Map.Entry<User, Integer> play : players) {
+                    if (play.getKey().equals(user)) {
+                        play.setValue(play.getValue() + nowQuestion.getPrice());
+                        return;
 
+                    }
                 }
-            }
-            nowQuestion = null;
-        } else {
-            for (Map.Entry<User, Integer> play : players) {
-                if (play.getKey().equals(user)) {
-                    play.setValue(play.getValue() + nowQuestion.getPrice());
-                    return;
+                nowQuestion = null;
+            } else {
+                for (Map.Entry<User, Integer> play : players) {
+                    if (play.getKey().equals(user)) {
+                        play.setValue(play.getValue() + nowQuestion.getPrice());
+                        return;
+                    }
                 }
             }
         }
