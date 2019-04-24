@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_havatonapi" default="compile.module.havatonapi">
+  <dirname property="module.havatonapi.basedir" file="${ant.file.module_havatonapi}"/>
+  
+  <property name="module.jdk.home.havatonapi" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.havatonapi" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.havatonapi" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.havatonapi" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="havatonapi.output.dir" value="${module.havatonapi.basedir}/../out/production/HavatonApi"/>
+  <property name="havatonapi.testoutput.dir" value="${module.havatonapi.basedir}/../out/test/HavatonApi"/>
+  
+  <path id="havatonapi.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="havatonapi.module.production.classpath">
+    <path refid="${module.jdk.classpath.havatonapi}"/>
+  </path>
+  
+  <path id="havatonapi.runtime.production.module.classpath">
+    <pathelement location="${havatonapi.output.dir}"/>
+  </path>
+  
+  <path id="havatonapi.module.classpath">
+    <path refid="${module.jdk.classpath.havatonapi}"/>
+    <pathelement location="${havatonapi.output.dir}"/>
+  </path>
+  
+  <path id="havatonapi.runtime.module.classpath">
+    <pathelement location="${havatonapi.testoutput.dir}"/>
+    <pathelement location="${havatonapi.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.havatonapi">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.havatonapi">
+    <patternset refid="excluded.from.module.havatonapi"/>
+  </patternset>
+  
+  
+  <target name="compile.module.havatonapi" depends="compile.module.havatonapi.production,compile.module.havatonapi.tests" description="Compile module HavatonApi"/>
+  
+  <target name="compile.module.havatonapi.production" depends="register.custom.compilers" description="Compile module HavatonApi; production classes"/>
+  
+  <target name="compile.module.havatonapi.tests" depends="register.custom.compilers,compile.module.havatonapi.production" description="compile module HavatonApi; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.havatonapi" description="cleanup module">
+    <delete dir="${havatonapi.output.dir}"/>
+    <delete dir="${havatonapi.testoutput.dir}"/>
+  </target>
+</project>

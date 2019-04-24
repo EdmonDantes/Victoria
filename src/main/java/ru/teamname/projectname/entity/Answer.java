@@ -1,4 +1,4 @@
-package ru.teamname.projectname.entites;
+package ru.teamname.projectname.entity;
 
 import lombok.Data;
 import org.springframework.lang.NonNull;
