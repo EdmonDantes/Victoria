@@ -1,14 +1,14 @@
-package ru.teamname.projectname.entity;
+package ru.teamname.projectname.entity.packsLogic;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "administration_users")
-public class Administrator {
+public class Pack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,11 +16,10 @@ public class Administrator {
 
     @NotNull
     @Column(unique = true)
-    private String login;
+    private String name;
 
     @NotNull
-    private String password;
+    @ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+    List<Category> categories;
 
-    @NotNull
-    private String role;
 }

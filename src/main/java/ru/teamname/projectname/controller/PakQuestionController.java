@@ -2,12 +2,12 @@ package ru.teamname.projectname.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.teamname.projectname.entity.Pack;
-import ru.teamname.projectname.repository.PackQuestionManager;
-import ru.teamname.projectname.repository.AnswerRepository;
-import ru.teamname.projectname.repository.CategoryRepository;
-import ru.teamname.projectname.repository.PackRepository;
-import ru.teamname.projectname.repository.QuestionRepository;
+import ru.teamname.projectname.entity.packsLogic.Pack;
+import ru.teamname.projectname.repository.packsLogic.PackQuestionManager;
+import ru.teamname.projectname.repository.packsLogic.AnswerRepository;
+import ru.teamname.projectname.repository.packsLogic.CategoryRepository;
+import ru.teamname.projectname.repository.packsLogic.PackRepository;
+import ru.teamname.projectname.repository.packsLogic.QuestionRepository;
 
 import javax.annotation.PostConstruct;
 

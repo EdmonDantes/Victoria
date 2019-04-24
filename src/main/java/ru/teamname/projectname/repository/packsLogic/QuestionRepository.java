@@ -1,4 +1,4 @@
-package ru.teamname.projectname.repository;
+package ru.teamname.projectname.repository.packsLogic;
 
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.teamname.projectname.entity.Question;
+import ru.teamname.projectname.entity.packsLogic.Question;
 
 @Service
 @Repository

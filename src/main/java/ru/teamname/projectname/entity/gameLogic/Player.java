@@ -1,7 +1,10 @@
-package ru.teamname.projectname.entity;
+package ru.teamname.projectname.entity.gameLogic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import ru.teamname.projectname.entity.packsLogic.Pack;
+import ru.teamname.projectname.entity.packsLogic.Question;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,14 +25,24 @@ public class Player implements Serializable  {
     private String username;
 
     @NotNull
-    @Column(length = 60)
+    @Column(length = 80)
+    @JsonIgnore
     private String password;
 
     @Column(unique = true)
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @NotNull
+    private Integer countOfGamePoints = 0;
+
+    @NotNull
+    private Integer countGames = 0;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Set<Pack> buyingPacks;
+
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+    private Set<Question> seeQuestion;
 
     @NotNull
     @Column(updatable = false)

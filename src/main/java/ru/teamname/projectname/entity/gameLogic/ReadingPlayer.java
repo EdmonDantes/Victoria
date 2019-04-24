@@ -1,14 +1,13 @@
-package ru.teamname.projectname.entity;
+package ru.teamname.projectname.entity.gameLogic;
 
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Data
-public class Pack {
+public class ReadingPlayer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +15,8 @@ public class Pack {
 
     @NotNull
     @Column(unique = true)
-    private String name;
+    private Player player;
 
     @NotNull
-    @ManyToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
-    List<Category> categories;
-
+    private Boolean readyPlayer;
 }

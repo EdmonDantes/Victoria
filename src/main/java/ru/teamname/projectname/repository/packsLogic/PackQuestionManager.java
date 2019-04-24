@@ -1,10 +1,10 @@
-package ru.teamname.projectname.repository;
+package ru.teamname.projectname.repository.packsLogic;
 
 import org.springframework.stereotype.Component;
-import ru.teamname.projectname.entity.Answer;
-import ru.teamname.projectname.entity.Category;
-import ru.teamname.projectname.entity.Pack;
-import ru.teamname.projectname.entity.Question;
+import ru.teamname.projectname.entity.packsLogic.Answer;
+import ru.teamname.projectname.entity.packsLogic.Category;
+import ru.teamname.projectname.entity.packsLogic.Pack;
+import ru.teamname.projectname.entity.packsLogic.Question;
 
 @Component
 public class PackQuestionManager {
