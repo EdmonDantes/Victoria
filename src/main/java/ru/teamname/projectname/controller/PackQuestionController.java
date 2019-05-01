@@ -2,18 +2,14 @@ package ru.teamname.projectname.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.teamname.projectname.entity.packsLogic.Pack;
-import ru.teamname.projectname.repository.packsLogic.PackQuestionManager;
-import ru.teamname.projectname.repository.packsLogic.AnswerRepository;
-import ru.teamname.projectname.repository.packsLogic.CategoryRepository;
-import ru.teamname.projectname.repository.packsLogic.PackRepository;
-import ru.teamname.projectname.repository.packsLogic.QuestionRepository;
+import ru.teamname.projectname.entity.packs.Pack;
+import ru.teamname.projectname.repository.packs.*;
 
 import javax.annotation.PostConstruct;
 
 @RestController
 @RequestMapping(path = "api/packs")
-public class PakQuestionController {
+public class PackQuestionController {
 
     @Autowired
     private PackRepository packRepository;

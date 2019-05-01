@@ -1,4 +1,4 @@
-package ru.teamname.projectname.repository;
+package ru.teamname.projectname.repository.admin;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.teamname.projectname.entity.Administrator;
+import ru.teamname.projectname.entity.admin.Administrator;
 
 @Service
 @Repository

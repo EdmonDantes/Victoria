@@ -1,4 +1,4 @@
-package ru.teamname.projectname.entity.packsLogic;
+package ru.teamname.projectname.entity.packs;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package ru.teamname.projectname.repository.gameLogic;
+package ru.teamname.projectname.repository.game;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -6,26 +6,26 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.teamname.projectname.entity.gameLogic.Player;
+import ru.teamname.projectname.entity.game.Player;
 
-import javax.persistence.ManyToMany;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public interface PlayerRepository extends CrudRepository<Player, Integer> {
 
-    @Query("select player from Player player where player.username = :username")
-    Player findByUsername(@Param("username") String username);
+    @Query("select player from Player player where player.name = :name")
+    Optional<Player> findByName(@Param("name") String name);
 
     @Query("select player from Player player where player.email = :email")
-    Player findByEmail(@Param("email") String email);
+    Optional<Player> findByEmail(@Param("email") String email);
 
-    @Query("select player from Player player where player.username = :usernameoremail or player.email = :usernameoremail")
-    Player findByUsernameOrEmail(@Param("usernameoremail") String usernameOrEmail);
+    @Query("select player from Player player where player.name = :input or player.email = :input")
+    Optional<Player> findByNameOrEmail(@Param("input") String nameOrEmail);
 
-    @Query("update Player player set player.username = :username where player.id = :id")
+    @Query("update Player player set player.name = :name where player.id = :id")
     @Modifying
-    void setUsername(@Param("id") Integer id, @Param("username") String username);
+    void setName(@Param("id") Integer id, @Param("name") String name);
 
     @Query("update Player player set player.password = :password where player.id = :id")
     @Modifying
@@ -43,7 +43,7 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Modifying
     void addOneGame(@Param("id") Integer id);
 
-    @Query(value = "INSERT INTO player_buying_packs(player_id, buying_packs_id) VALUES(:id, :packId) ON DUPLICATE KEY UPDATE player_id = :id, buying_packs_id = :packId", nativeQuery = true)
+    @Query(value = "INSERT INTO players_buying_packs(player_id, buying_packs_id) VALUES(:id, :packId) ON DUPLICATE KEY UPDATE player_id = :id, buying_packs_id = :packId", nativeQuery = true)
     @Modifying
     void addBuyingPack(@Param("id") Integer id, @Param("packId") Integer packId);
 

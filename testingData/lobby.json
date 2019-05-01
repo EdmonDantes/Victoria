@@ -1,0 +1,8 @@
+{
+  "name": "lobbyName",
+  "maxPlayers": 2,
+  "timeForReading": 0,
+  "timeForAnswering": 20,
+  "maxRounds": 2,
+  "master": 1
+}

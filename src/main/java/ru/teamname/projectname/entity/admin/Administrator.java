@@ -1,4 +1,4 @@
-package ru.teamname.projectname.entity.gameLogic;
+package ru.teamname.projectname.entity.admin;
 
 import lombok.Data;
 
@@ -7,7 +7,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-public class ReadingPlayer {
+@Table(name = "administration_users")
+public class Administrator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +16,11 @@ public class ReadingPlayer {
 
     @NotNull
     @Column(unique = true)
-    private Player player;
+    private String login;
 
     @NotNull
-    private Boolean readyPlayer;
+    private String password;
+
+    @NotNull
+    private String role;
 }
