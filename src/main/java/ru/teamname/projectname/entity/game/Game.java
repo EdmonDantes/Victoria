@@ -1,12 +1,17 @@
 package ru.teamname.projectname.entity.game;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
+import org.thymeleaf.standard.expression.Each;
 import ru.teamname.projectname.entity.packs.Category;
+import ru.teamname.projectname.entity.packs.Pack;
 import ru.teamname.projectname.entity.packs.Question;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -24,44 +29,55 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
     private String name;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
-    private Integer timeForReading;
+    private Integer timeForReading = 0; // in seconds
 
-    @NotNull
     @Column(nullable = false, updatable = false)
-    private Integer timeForAnswering;
+    private Integer timeForAnswering = 60; // in seconds
 
-    @NotNull
     @Column(nullable = false, updatable = false)
-    private Integer maxRounds;
+    private Integer maxRounds = 1;
 
-    @NotNull
-    @OneToMany
-    private Set<Player> players;
+    @Column(nullable = false, updatable = false)
+    private Integer countOfCategories = 2;
 
-    @NotNull
     @Column(nullable = false)
-    private Player chooser;
+    private Integer nowRound = 0;
 
-    @NotNull
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Category> categories;
+    @Column(nullable = false)
+    private List<Round> round = new ArrayList<>();
 
-    @NotNull
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.EAGER)
+    private List<PlayerStatus> players = new ArrayList<>();
+
+    @Column(nullable = false)
+    @JsonIgnore
+    private Integer chooserIndex = 0;
+
+    @OneToOne
+    @Column(nullable = false)
+    private PlayerStatus chooser = new PlayerStatus();
+
     @ManyToMany
-    private List<Question> questions;
+    @JsonIgnore
+    private List<Pack> usingPacks = new ArrayList<>();
 
-    @NotNull
+
+
+
+
+
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<QuestionStatus> questions = new ArrayList<>();
+
+    @Column(nullable = false)
+    private Boolean online;
+
     @Column(updatable = false)
     @CreatedDate
     private Date createdDate;
-
-    @NotNull
-    @Column(nullable = false)
-    private Boolean online;
 }

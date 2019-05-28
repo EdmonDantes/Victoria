@@ -1,10 +1,12 @@
 package ru.teamname.projectname.entity.packs;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,15 +21,15 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
+    @Column(nullable = false)
     private String question;
 
-    @NotNull
+    @Column(nullable = false)
     private Integer price;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Answer.class)
-    @JoinTable
-    private List<Answer> answers;
+    @JsonIgnore
+    private List<Answer> answers = new ArrayList<>();
 
     public Question(){}
 }

@@ -21,4 +21,12 @@ public interface PlayerStatusRepository extends CrudRepository<PlayerStatus, Int
     @Query("update PlayerStatus status set status.lobbyId = :lobbyId where status.id = :id")
     @Modifying
     void updateLobbyId(@Param("id") Integer id, @Param("lobbyId") Integer lobbyId);
+
+    @Query("update PlayerStatus status set status.gameId = :gameId where status.id = :id")
+    @Modifying
+    void updateGameId(@Param("id") Integer id, @Param("gameId") Integer gameId);
+
+    @Query("update PlayerStatus status set status.status = :status where status.id = :id")
+    @Modifying
+    void updateStatus(@Param("id") Integer id, @Param("status") Integer status);
 }

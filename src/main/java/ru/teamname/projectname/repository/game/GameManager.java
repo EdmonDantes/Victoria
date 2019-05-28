@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.teamname.projectname.entity.chat.Chat;
 import ru.teamname.projectname.entity.chat.ChatMessage;
+import ru.teamname.projectname.entity.game.Game;
 import ru.teamname.projectname.entity.game.Lobby;
 import ru.teamname.projectname.entity.game.Player;
 import ru.teamname.projectname.entity.game.PlayerStatus;
@@ -77,10 +78,10 @@ public class GameManager {
             Optional<PlayerStatus> tmp = playerStatusRepository.findByPlayerId(player);
             if (tmp.isPresent())
                 //TODO: create id when player gaming in online game or not lobby
-                if (tmp.get().getLobbyId() == null || !tmp.get().getLobbyId().getOnline())
+                if (tmp.get().getStatus() > -1 && (tmp.get().getLobbyId() == null || !tmp.get().getLobbyId().getOnline()) && (tmp.get().getGameId() == null || !tmp.get().getGameId().getOnline()))
                     return tmp.get();
 
-            return null;
+            return new PlayerStatus();
         }
     }
 
@@ -98,19 +99,26 @@ public class GameManager {
                     result.getPlayerStatus().add(tmp);
                 else {
                     lobbyRepository.setOffline(result.getId());
-                    return null;
+                    return new Lobby();
                 }
             }
 
             PlayerStatus masterStatus = createPlayerStatus(master.get(), result);
-            if (masterStatus == null) {
+            if (masterStatus == null || masterStatus.getId() == null) {
                 lobbyRepository.setOffline(result.getId());
-                return null;
+                return new Lobby();
             } else
                 result.getPlayerStatus().add(masterStatus);
 
             return result;
         }
         return lobby;
+    }
+
+    public Game createGame(Lobby lobby) {
+        if (lobby != null && lobby.getId() != null && lobby.getPlayerStatus() != null && lobby.getPlayerStatus().size() > 1) {
+            Game result = new Game();
+        }
+        return new Game();
     }
 }

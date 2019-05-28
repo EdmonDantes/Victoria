@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.teamname.projectname.entity.game.Lobby;
 
-import javax.persistence.ManyToOne;
-
 @Repository
 @Transactional
 public interface LobbyRepository extends CrudRepository<Lobby, Integer> {

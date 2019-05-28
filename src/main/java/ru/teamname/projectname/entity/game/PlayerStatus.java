@@ -2,7 +2,6 @@ package ru.teamname.projectname.entity.game;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.thymeleaf.standard.expression.Each;
 
 import javax.persistence.*;
 
@@ -22,7 +21,7 @@ public class PlayerStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "playerId", unique = true, nullable = false)
     private Player playerId;
 
@@ -41,4 +40,9 @@ public class PlayerStatus {
     private Lobby lobbyId;
 
     //TODO: Add gameId for gaming player
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "gameId")
+    @JsonIgnore
+    private Game gameId;
 }
