@@ -24,6 +24,7 @@ public class CategoryController {
         return new Category();
     }
 
+    // TODO: move to admin category
     @RequestMapping(path = "/add", method = RequestMethod.POST, consumes = "application/json")
     public @ResponseBody Category addCategory(@RequestBody Category category) {
         if (category != null && (category.getId() == null  || category.getId() < 0) && categoryRepository != null) {
