@@ -1,4 +1,4 @@
-package ru.teamname.projectname.entity.localization;
+package ru.teamname.projectname.entity.packs;
 
 import lombok.Data;
 
@@ -9,13 +9,12 @@ import javax.persistence.Id;
 
 @Entity
 @Data
-public class LocalizationString {
+public class Pack {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String locale;
 
-    private String string;
+
 }

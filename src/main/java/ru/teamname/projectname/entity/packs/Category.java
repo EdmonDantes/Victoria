@@ -5,17 +5,18 @@ import ru.teamname.projectname.entity.localization.LocalizationString;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 @Data
 public class Category {
 
     @Id
-    public Integer id;
+    private Integer id;
 
-    @OneToOne
-    public LocalizationString name;
+    @OneToMany
+    private Set<LocalizationString> name;
 
 
 }
