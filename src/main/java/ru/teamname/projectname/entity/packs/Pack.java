@@ -19,4 +19,6 @@ public class Pack {
 
     private Integer price;
 
+    private Integer minAge;
+
 }

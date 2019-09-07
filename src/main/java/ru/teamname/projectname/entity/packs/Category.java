@@ -3,9 +3,7 @@ package ru.teamname.projectname.entity.packs;
 import lombok.Data;
 import ru.teamname.projectname.entity.localization.LocalizationString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
@@ -13,6 +11,7 @@ import java.util.Set;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @OneToMany

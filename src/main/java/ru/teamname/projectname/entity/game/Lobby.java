@@ -7,6 +7,7 @@ import ru.teamname.projectname.entity.packs.Pack;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,10 +18,11 @@ public class Lobby implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(nullable = false)
     private String name;
 
     @OneToMany
-    private Set<Account> players;
+    private Set<Account> players = new HashSet<>();
 
     @ManyToOne
     private Account admin;
@@ -33,10 +35,10 @@ public class Lobby implements Serializable {
 
     private Integer maxQuestion;
 
-    private Long dateTimeCreate;
+    private Long dateTimeCreate = System.currentTimeMillis();
 
     @OneToMany
-    private Set<Pack> packs;
+    private Set<Pack> packs = new HashSet<>();
 
     @OneToOne
     private Game game;
