@@ -11,7 +11,7 @@ import java.util.Set;
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @OneToMany
