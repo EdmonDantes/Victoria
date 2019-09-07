@@ -1,11 +1,10 @@
 package ru.teamname.projectname.entity.packs;
 
 import lombok.Data;
+import ru.teamname.projectname.entity.localization.LocalizationString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -15,6 +14,9 @@ public class Pack {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @OneToMany
+    private Set<LocalizationString> name;
 
+    private Integer price;
 
 }
