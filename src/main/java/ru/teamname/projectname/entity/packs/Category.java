@@ -1,23 +1,21 @@
 package ru.teamname.projectname.entity.packs;
 
 import lombok.Data;
+import ru.teamname.projectname.entity.localization.LocalizationString;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 @Data
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    public Integer id;
 
-    @NotNull
-    private String name;
+    @OneToOne
+    public LocalizationString name;
 
-    @NotNull
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List<Question> questions;
+
 }
