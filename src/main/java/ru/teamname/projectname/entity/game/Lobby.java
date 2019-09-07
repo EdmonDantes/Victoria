@@ -3,12 +3,15 @@ package ru.teamname.projectname.entity.game;
 
 import lombok.Data;
 import ru.teamname.projectname.entity.account.Account;
+import ru.teamname.projectname.entity.packs.Pack;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
-public class Lobby {
+public class Lobby implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,12 +19,13 @@ public class Lobby {
 
     private String name;
 
-    private Integer count;
+    @OneToMany
+    private Set<Account> players;
 
     @ManyToOne
     private Account admin;
 
-    private String local;
+    private String locale;
 
     private Integer maxPlayers;
 
@@ -29,5 +33,11 @@ public class Lobby {
 
     private Integer maxQuestion;
 
-    private Integer gamesId;
+    private Long dateTimeCreate;
+
+    @OneToMany
+    private Set<Pack> packs;
+
+    @OneToOne
+    private Game game;
 }

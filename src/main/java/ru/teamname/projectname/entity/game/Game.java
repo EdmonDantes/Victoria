@@ -2,26 +2,28 @@ package ru.teamname.projectname.entity.game;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Data
-public class Game {
+public class Game implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String name;
+    @OneToOne
+    private Lobby lobby;
 
-    private Integer count;
+    @OneToMany
+    private Set<GameQuestion> questions;
 
-    private Integer gameId;
+    @OneToMany
+    private Set<PlayerStatus> playerStatus;
 
-    private Integer column;
+    private Long dateTimeStart;
 
-    private Integer questionsId;
+    private Long dateTimeEnd;
 }
