@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.teamname.projectname.entity.localization.LocalizationString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,13 +16,14 @@ public class Question {
     private Integer id;
 
     @OneToMany
-    private Set<LocalizationString> questionString;
+    private Set<LocalizationString> questionString = new HashSet<>();
 
     @OneToMany
-    private Set<LocalizationString> answerString;
+    private Set<LocalizationString> answerString = new HashSet<>();
 
     @OneToMany
-    private Set<Category> category;
+    private Set<Category> category = new HashSet<>();
 
+    @Column(nullable = false)
     private Integer price;
 }

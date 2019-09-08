@@ -65,6 +65,14 @@ public class LocalizationService {
         return currency == null ? new Currency() : currency;
     }
 
+    public Currency addNameToCurrency(Currency currency, LocalizationString lstring) {
+        if (currency != null && currency.getId() != null && currency.getId() > 0 && lstring != null && lstring.getId() != null && lstring.getId() > 0 && currencyRepository != null) {
+            currencyRepository.addName(currency.getId(), lstring.getId());
+            currency.getName().add(lstring);
+        }
+        return currency == null ? new Currency() : currency;
+    }
+
     public LocalizationPrice getLPrice(Integer id) {
         if (id != null && id > 0 && localizationPriceRepository != null) {
             Optional<LocalizationPrice> optionalLocalizationPrice = localizationPriceRepository.findById(id);

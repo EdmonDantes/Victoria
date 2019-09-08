@@ -11,7 +11,7 @@ import ru.teamname.projectname.service.LocalizationService;
 
 @RestController
 @RequestMapping(path = "api/localization")
-public class LocalizationStringController {
+public class LocalizationController {
 
     @Autowired
     LocalizationService localizationService;
