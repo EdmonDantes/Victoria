@@ -28,7 +28,15 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
 
     @Query("update Game game set game.lobby = :lobby where game.id = :game")
     @Modifying
-    public void update(@Param("game") Integer game, @Param("lobby") Integer lobby);
+    public void updateLobby(@Param("game") Integer game, @Param("lobby") Integer lobby);
+
+    @Query("update Game game set game.dateTimeStart = :dateTimeStart where game.id = :game")
+    @Modifying
+    public void updateDateTimeStart(@Param("game") Integer game, @Param("dateTimeStart") Long dateTimeStart);
+
+    @Query("update Game game set game.dateTimeEnd = :dateTimeEnd where game.id = :game")
+    @Modifying
+    public void updateDateTimeEnd(@Param("game") Integer game, @Param("dateTimeEnd") Long dateTimeEnd);
 
 
 }

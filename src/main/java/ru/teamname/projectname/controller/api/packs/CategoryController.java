@@ -8,7 +8,7 @@ import ru.teamname.projectname.repository.packs.CategoryRepository;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping(path = "/api/category")
 public class CategoryController {
 
     @Autowired

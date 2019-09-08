@@ -20,5 +20,6 @@ public class PlayerStatus implements Serializable {
     @OneToOne
     private Account account;
 
-    private Integer scope;
+    @Column(nullable = false)
+    private Integer scope = 0;
 }

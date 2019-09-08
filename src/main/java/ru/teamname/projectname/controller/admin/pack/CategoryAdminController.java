@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/admin/category")
-public class CategoryController {
+public class CategoryAdminController {
 
     @Autowired
     private PackService packService;

@@ -23,7 +23,8 @@ public class Game implements Serializable {
     @OneToMany
     private Set<PlayerStatus> playerStatus;
 
-    private Long dateTimeStart;
+    @Column(nullable = false)
+    private Long dateTimeStart = System.currentTimeMillis();
 
     private Long dateTimeEnd;
 }

@@ -1,0 +1,116 @@
+body{
+    margin: 0;
+    padding: 20px;
+    font-family: "Verdana";
+    background-color: #A3DBF3;
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "lobby games players"
+                         "packs questions questions"
+                         "categories questions questions";
+    grid-column-gap: 50px;
+}
+
+.list
+{
+    background-color: rgba(3, 27, 137, 0.22);
+    border-radius: 20px;
+    padding: 0 0 20px 0;
+    text-align: center;
+    box-shadow: 5px 5px 10px 0px #3498DB;
+    margin-right: 50px;
+    margin-bottom: 50px;
+
+}
+.item-list
+{
+    overflow-y: scroll;
+    height: 250px;
+    padding: 0 20px;
+}
+.item-list::-webkit-scrollbar
+{
+    width: 8px;
+    height: 6px;
+    background-color: #3498DB;
+}
+.item-list::-webkit-scrollbar-thumb
+{
+    width: 8px;
+    height: 6px;
+    background-color: #2A579E;
+}
+.list_title
+{
+    margin: 0 0 20px 0;
+    padding: 20px;
+    border-bottom: 1px solid black;
+    padding: 5px 10px;
+    position: relative;
+}
+.list_title::after
+{
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 20px;
+    vertical-align: middle;
+    background-image: url("img/sort-ico.png");
+    background-size: 20px 20px;
+    top: 17px;
+}
+
+.list_title::after:hover
+{
+    cursor: pointer;
+}
+.lobby_list
+{
+    grid-area: lobby;
+}
+.games_list
+{
+    grid-area: games;
+}
+.players_list
+{
+    grid-area: players;
+}
+
+.packs_list
+{
+    grid-area: packs;
+}
+.questions_list
+{
+    grid-area: questions;
+}
+.questions_list .item-list
+{
+    height: auto;
+}
+.categories-list
+{
+    grid-area: categories;
+}
+
+.list .item
+{
+    margin: 0 auto 20px auto;
+    background-color: #D2FFDA;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.lobby_item:last-child
+{
+    margin-bottom: 0;
+}
+#questions_list
+{
+    visibility: hidden;
+}

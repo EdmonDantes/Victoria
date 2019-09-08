@@ -18,19 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/admin/css/**").addResourceLocations("classpath:/static/adminPanel/css/")
+        registry.addResourceHandler("/admin/**").addResourceLocations("classpath:/templates/adminPanel/")
                 .setCacheControl(CacheControl.maxAge(30, TimeUnit.SECONDS));
-
-        registry.addResourceHandler("/admin/js/**").addResourceLocations("classpath:/static/adminPanel/js/")
-                .setCacheControl(CacheControl.maxAge(30, TimeUnit.SECONDS));
-
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/root/")
-                .setCacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS));
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/admin").setViewName("/adminPanel/index.html");
-        registry.addViewController("/**").setViewName("/root/index");
     }
 }

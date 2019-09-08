@@ -14,12 +14,15 @@ public class GameQuestion implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer x;
+    @Column(nullable = false)
+    private Integer x = 0;
 
-    private Integer y;
+    @Column(nullable = false)
+    private Integer y = 0;
 
     @OneToOne
     private Question question;
 
-    private Boolean played;
+    @Column(nullable = false)
+    private Boolean played = false;
 }

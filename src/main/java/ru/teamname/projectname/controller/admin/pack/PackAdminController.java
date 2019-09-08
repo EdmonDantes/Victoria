@@ -7,7 +7,7 @@ import ru.teamname.projectname.service.PackService;
 
 @RestController
 @RequestMapping(path = "/api/admin/pack")
-public class PackController {
+public class PackAdminController {
 
     @Autowired
     PackService packService;

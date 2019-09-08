@@ -1,10 +1,123 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Admin panel</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Админ панель</title>
+    <link rel="icon" href="http://localhost:8080/admin/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="admin/admin_panel.css">
+    <script type="text/javascript" src="admin/load_accounts.js"></script>
 </head>
-<body>
-<header>
-    <h1>May be admin panel</h1>
-</header>
+<body onload="loadAccounts();">
+
+    <div class="list lobby_list">
+        <h1 class="list_title">Лобби</h1>
+        <div class="item-list">
+            <div class="item">
+                <p>ЧИ ДА</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи ИЗМЕНЕНИЕ?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="list games_list">
+        <h1 class="list_title">Игры</h1>
+        <div class="item-list">
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="list players_list">
+        <h1 class="list_title">Игроки</h1>
+        <div class="item-list"
+             id="playerList">
+            <!--<div class="item">-->
+                <!--<p>Получилось чи нет?</p>-->
+            <!--</div>-->
+            <!--<div class="item">-->
+                <!--<p>Получилось чи нет?</p>-->
+            <!--</div>-->
+            <!--<div class="item">-->
+                <!--<p>Получилось чи нет?</p>-->
+            <!--</div>-->
+
+        </div>
+    </div>
+    <div class="list packs_list">
+        <h1 class="list_title">Паки</h1>
+        <div class="item-list">
+            <div class="item" onclick="viewDiv(this, id)">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item" onclick="viewDiv(this, id)">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="list categories_list">
+        <h1 class="list_title">Категории</h1>
+        <div class="item-list">
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="list questions_list" id = "questions_list">
+        <h1 class="list_title">Вопросы</h1>
+        <div class="item-list">
+            <div class="item" >
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+            <div class="item">
+                <p>Получилось чи нет?</p>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
