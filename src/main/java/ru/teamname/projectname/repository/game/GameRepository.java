@@ -14,6 +14,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     // game_questions
     // game_id
     // question_id
+
     @Query(nativeQuery = true, value = "INSERT INTO `game_questions`(`game_id`, `question_id`) VALUES (:game, :question) ON DUPLICATE KEY UPDATE `game_id` = :game, `question_id` = :question")
     @Modifying
     public void addGameQuestion(@Param("game") Integer game, @Param("question") Integer question);
@@ -26,9 +27,18 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     // game_player_status
     // game_id
     // player_status_id
+    @Query(nativeQuery = true, value = " INSERT INTO `game_player_status` (`game_id`, `player_status_id`)VALUES (:game, :status) ON DUPLICATE KEY UPDATE `game_id`=:game,`player_status_id = :status`")
+    @Modifying
     public void addPlayerStatus(@Param("game") Integer game, @Param("status") Integer status);
 
     //TODO: create native query
+    @Query(nativeQuery = true, value = "DELETE FROM `game_player_status` WHERE `game_id` = :game AND `player_status_id` = :status")
     public void deletePlayerStatus(@Param("game") Integer game, @Param("status") Integer status);
 
+    @Query("update Game game set game.lobby = :lobby where game.id = :game")
+    @Modifying
+    public void update(@Param("game") Integer game, @Param("lobby") Integer lobby);
+    
+
 }
+
