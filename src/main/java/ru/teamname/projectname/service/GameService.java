@@ -50,7 +50,7 @@ public class GameService {
 
     public boolean addPlayer(Integer id, Account account) {
         if (id != null && id > 0 && account != null && account.getId() != null && account.getId() > 0 && lobbyRepository != null) {
-            lobbyRepository.addPlayer(account, id);
+            //lobbyRepository.addPlayer(account.getId(), id);
             return true;
         }
         return false;

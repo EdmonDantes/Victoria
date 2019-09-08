@@ -27,19 +27,24 @@ public class Lobby implements Serializable {
     @ManyToOne
     private Account admin;
 
-    private String locale;
+    @Column(nullable = false)
+    private String locale = "en-US";
 
-    private Integer maxPlayers;
+    @Column(nullable = false)
+    private Integer maxPlayers = 2;
 
-    private Integer maxCategories;
+    @Column(nullable = false)
+    private Integer maxCategories = 4;
 
-    private Integer maxQuestion;
+    @Column(nullable = false)
+    private Integer maxQuestion = 4;
 
+    @Column(nullable = false)
     private Long dateTimeCreate = System.currentTimeMillis();
 
     @OneToMany
     private Set<Pack> packs = new HashSet<>();
 
     @OneToOne
-    private Game game;
+    private Game game = null;
 }
