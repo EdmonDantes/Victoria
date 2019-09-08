@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.teamname.projectname.entity.game.Lobby;
+import ru.teamname.projectname.entity.packs.Pack;
 import ru.teamname.projectname.entity.packs.Question;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class Account implements Serializable {
 
     @ManyToMany
     private Set<Question> playedQuestions = new HashSet<>();
+
+    @ManyToMany
+    private Set<Pack> buyPacks = new HashSet<>();
 
     @OneToOne
     private Lobby lobby;
