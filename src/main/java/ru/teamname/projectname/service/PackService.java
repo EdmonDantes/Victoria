@@ -10,6 +10,8 @@ import ru.teamname.projectname.repository.packs.CategoryRepository;
 import ru.teamname.projectname.repository.packs.PackRepository;
 import ru.teamname.projectname.repository.packs.QuestionRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,15 +38,28 @@ public class PackService {
         return new Category();
     }
 
+    public List<Category> getCategories(){
+        if (categoryRepository != null)
+            return categoryRepository.findAll();
+        return new ArrayList<>();
+    }
+
     public Category addCategory(Category category){
         if(category != null && (category.getId() == null || category.getId() < 0) && categoryRepository != null){
-            for (LocalizationString tmp : category.getName()) {
-                if (tmp != null && (tmp.getId() == null || tmp.getId() < 1))
-                    localizationService.addLString(tmp);
-            }
+            localizationService.addLStrings(category.getName().toArray(new LocalizationString[0]));
             return categoryRepository.save(category);
         }
         return category == null ? new Category() : category;
+    }
+
+    public boolean deleteCategory(Integer id) {
+        if (id != null && id > 0 && categoryRepository != null) {
+            try {
+                categoryRepository.deleteById(id);
+                return true;
+            } catch (Exception ignore){}
+        }
+        return false;
     }
 
     public Question getQuestion(Integer id){

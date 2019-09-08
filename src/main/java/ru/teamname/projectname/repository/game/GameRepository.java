@@ -13,7 +13,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query(nativeQuery = true, value = "INSERT INTO `game_questions`(`game_id`, `question_id`) VALUES (:game, :question) ON DUPLICATE KEY UPDATE `game_id` = :game, `question_id` = :question")
     @Modifying
     public void addGameQuestion(@Param("game") Integer game, @Param("question") Integer question);
-    
+
     @Query(nativeQuery = true, value = "DELETE FROM `game_questions` WHERE `game_id` = :game AND `question_id` = :question")
     @Modifying
     public void deleteGameQuestion(@Param("game") Integer game, @Param("question") Integer question);
