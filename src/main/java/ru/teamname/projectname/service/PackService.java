@@ -33,7 +33,7 @@ public class PackService {
     }
 
     public Category addCategory(Category category){
-        if(category != null && (category.getid() == null || category.getid() < 0) && categoryRepository != null){
+        if(category != null && (category.getId() == null || category.getId() < 0) && categoryRepository != null){
             return categoryRepository.save(category);
         }
         return category == null ? new Category() : category;
@@ -49,7 +49,7 @@ public class PackService {
     }
 
     public Pack addPack(Pack pack){
-        if(pack != null && (pack.getid() == null || pack.getid() < 0) && packRepository != null){
+        if(pack != null && (pack.getId() == null || pack.getId() < 0) && packRepository != null){
             return packRepository.save(pack);
         }
         return pack == null ? new Pack() : pack;
@@ -65,7 +65,7 @@ public class PackService {
     }
 
     public Question addQuestion(Question question){
-        if(question !=null && (question.getid() == null || question.getid() < 0) && questionRepository != null){
+        if(question !=null && (question.getId() == null || question.getId() < 0) && questionRepository != null){
             return questionRepository.save(question);
         }
         return question == null ? new Question() : question;
