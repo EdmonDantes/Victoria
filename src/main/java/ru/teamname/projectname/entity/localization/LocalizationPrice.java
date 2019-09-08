@@ -15,5 +15,6 @@ public class LocalizationPrice {
     @ManyToOne
     private Currency currency;
 
+    @Column(nullable = false)
     private Integer price;
 }
