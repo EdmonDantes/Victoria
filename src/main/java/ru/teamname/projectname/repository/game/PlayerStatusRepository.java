@@ -12,6 +12,6 @@ public interface PlayerStatusRepository extends JpaRepository<PlayerStatus, Inte
 
     @Query("update PlayerStatus ps set ps.scope = :scope where ps.id = :id")
     @Modifying
-    public void updateScope(@Param("id") Integer id, @Param("scope") Integer scope);
+    void updateScope(@Param("id") Integer id, @Param("scope") Integer scope);
 
 }

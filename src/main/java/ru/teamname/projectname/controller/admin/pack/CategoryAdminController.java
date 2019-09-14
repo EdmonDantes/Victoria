@@ -3,7 +3,7 @@ package ru.teamname.projectname.controller.admin.pack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.teamname.projectname.entity.packs.Category;
-import ru.teamname.projectname.service.PackService;
+import ru.teamname.projectname.service.entity.PackService;
 
 import java.util.List;
 

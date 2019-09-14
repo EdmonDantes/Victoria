@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,10 +19,10 @@ public class Game implements Serializable {
     private Lobby lobby;
 
     @OneToMany
-    private Set<GameQuestion> questions;
+    private Set<GameQuestion> questions = new HashSet<>();
 
     @OneToMany
-    private Set<PlayerStatus> playerStatus;
+    private Set<PlayerStatus> playerStatus = new HashSet<>();
 
     @Column(nullable = false)
     private Long dateTimeStart = System.currentTimeMillis();

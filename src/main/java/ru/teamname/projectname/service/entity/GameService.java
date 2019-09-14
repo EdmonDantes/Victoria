@@ -1,16 +1,13 @@
-package ru.teamname.projectname.service;
+package ru.teamname.projectname.service.entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.teamname.projectname.entity.account.Account;
-import ru.teamname.projectname.entity.account.AccountToken;
 import ru.teamname.projectname.entity.game.Lobby;
 import ru.teamname.projectname.repository.account.AccountRepository;
-import ru.teamname.projectname.repository.account.AccountTokenRepository;
 import ru.teamname.projectname.repository.game.GameRepository;
 import ru.teamname.projectname.repository.game.LobbyRepository;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -41,7 +38,7 @@ public class GameService {
             if (account != null && account.getId() != null && account.getId() > 0 && account.getLobby() == null) {
                 lobby.setAdmin(account);
                 lobbyRepository.save(lobby);
-                accountRepository.updateAccountByLobby(account.getId(), lobby);
+                //accountRepository.updateLobby(account.getId(), lobby);
             }
 
         }
@@ -49,10 +46,7 @@ public class GameService {
     }
 
     public boolean addPlayer(Integer id, Account account) {
-        if (id != null && id > 0 && account != null && account.getId() != null && account.getId() > 0 && lobbyRepository != null) {
-            //lobbyRepository.addPlayer(account.getId(), id);
-            return true;
-        }
-        return false;
+        //lobbyRepository.addPlayer(account.getId(), id);
+        return id != null && id > 0 && account != null && account.getId() != null && account.getId() > 0 && lobbyRepository != null;
     }
 }

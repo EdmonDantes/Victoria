@@ -12,10 +12,10 @@ public interface LocalizationStringRepository extends JpaRepository<Localization
 
     @Query("update LocalizationString lstring set lstring.locale = :locale where  lstring.id = :lstring")
     @Modifying
-    public void updateLocale(@Param("lstring") Integer lstring, @Param("locale") String locale);
+    void updateLocale(@Param("lstring") Integer lstring, @Param("locale") String locale);
 
     @Query("update LocalizationString lstring set lstring.string = :string where lstring.id = :lstring")
     @Modifying
-    public void updateString(@Param("lstring") Integer lstring, @Param("string") String string);
+    void updateString(@Param("lstring") Integer lstring, @Param("string") String string);
 
 }

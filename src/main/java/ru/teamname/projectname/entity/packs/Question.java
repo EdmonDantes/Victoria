@@ -25,5 +25,5 @@ public class Question {
     private Set<Category> category = new HashSet<>();
 
     @Column(nullable = false)
-    private Integer price;
+    private Integer scope = 0;
 }

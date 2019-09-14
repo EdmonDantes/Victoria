@@ -16,5 +16,5 @@ public class LocalizationPrice {
     private Currency currency;
 
     @Column(nullable = false)
-    private Integer price;
+    private Integer price = 0;
 }

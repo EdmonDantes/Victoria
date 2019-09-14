@@ -10,12 +10,12 @@ import java.util.List;
 @Repository
 public interface AccountTokenRepository extends JpaRepository<AccountToken, Integer> {
 
-    public AccountToken getByToken(String token);
+    AccountToken getByToken(String token);
 
-    public void deleteByToken(String token);
+    void deleteByToken(String token);
 
-    public void deleteByAccount(Account account);
+    void deleteByAccount(Account account);
 
-    public List<AccountToken> getAllByAccount(Account account);
+    List<AccountToken> getAllByAccount(Account account);
 
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.teamname.projectname.entity.localization.LocalizationString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,7 @@ public class Category {
     private Integer id;
 
     @OneToMany
-    private Set<LocalizationString> name;
+    private Set<LocalizationString> name = new HashSet<>();
 
 
 }

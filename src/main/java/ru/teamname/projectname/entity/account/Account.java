@@ -2,7 +2,9 @@ package ru.teamname.projectname.entity.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+import org.springframework.web.servlet.View;
 import ru.teamname.projectname.entity.game.Lobby;
 import ru.teamname.projectname.entity.packs.Pack;
 import ru.teamname.projectname.entity.packs.Question;
@@ -45,6 +47,6 @@ public class Account implements Serializable {
     @ManyToMany
     private Set<Pack> buyPacks = new HashSet<>();
 
-    @OneToOne
+    @ManyToOne
     private Lobby lobby;
 }

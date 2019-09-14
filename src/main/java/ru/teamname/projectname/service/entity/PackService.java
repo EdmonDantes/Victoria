@@ -1,4 +1,4 @@
-package ru.teamname.projectname.service;
+package ru.teamname.projectname.service.entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

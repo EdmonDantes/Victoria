@@ -1,6 +1,6 @@
 package ru.teamname.projectname.entity.game;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import ru.teamname.projectname.entity.account.Account;
 import ru.teamname.projectname.entity.packs.Pack;
@@ -22,7 +22,8 @@ public class Lobby implements Serializable {
     private String name;
 
     @OneToMany
-    private Set<Account> players = new HashSet<>();
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Account> players;
 
     @ManyToOne
     private Account admin;

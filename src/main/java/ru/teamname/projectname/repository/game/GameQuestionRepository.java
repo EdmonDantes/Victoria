@@ -11,8 +11,8 @@ import ru.teamname.projectname.entity.game.GameQuestion;
 public interface GameQuestionRepository extends JpaRepository<GameQuestion, Integer>{
 
 
-    @Query("update GameQuestion q set q.played = :player where q.id = :id")
+    @Query("update GameQuestion q set q.played = :played where q.id = :id")
     @Modifying
-    public void updatePlayed(@Param("id") Integer id, @Param("played") Boolean played);
+    void updatePlayed(@Param("id") Integer id, @Param("played") Boolean played);
 
 }

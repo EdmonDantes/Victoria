@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.teamname.projectname.entity.account.AccountToken;
 import ru.teamname.projectname.entity.game.Lobby;
 import ru.teamname.projectname.repository.account.AccountTokenRepository;
-import ru.teamname.projectname.service.GameService;
+import ru.teamname.projectname.service.entity.GameService;
 
 @RestController
 @RequestMapping(path = "/api/lobby")

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.teamname.projectname.entity.account.Account;
 import ru.teamname.projectname.entity.account.AccountToken;
-import ru.teamname.projectname.service.AccountService;
+import ru.teamname.projectname.service.entity.AccountService;
 
 import java.util.List;
 

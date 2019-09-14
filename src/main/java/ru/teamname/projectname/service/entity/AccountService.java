@@ -1,6 +1,5 @@
-package ru.teamname.projectname.service;
+package ru.teamname.projectname.service.entity;
 
-import jdk.nashorn.internal.parser.Token;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,15 @@ public class AccountService {
         return account == null ? new Account() : account;
     }
 
+    public Account getAccountFromToken(String token) {
+        if (token != null && accountTokenRepository != null) {
+            AccountToken accountToken = accountTokenRepository.getByToken(token);
+            if (accountToken != null && accountToken.getAccount() != null)
+                return accountToken.getAccount();
+        }
+        return new Account();
+    }
+
     public AccountToken addAccountToken(Account account) {
         if (account != null && account.getId() != null && account.getId() > 0 && accountTokenRepository != null) {
                 AccountToken accountToken = new AccountToken();
@@ -68,19 +76,11 @@ public class AccountService {
         return new AccountToken();
     }
 
-    public Account getAccountFromToken(String token) {
-        if (token != null && accountTokenRepository != null) {
-            AccountToken accountToken = accountTokenRepository.getByToken(token);
-            if (accountToken != null && accountToken.getAccount() != null)
-                return accountToken.getAccount();
-        }
-        return new Account();
-    }
-
     public AccountToken addAccountToken(String login, String password) {
         if (login != null && password != null && accountRepository != null) {
-            Account account = accountRepository.getAccountByLoginAndPassword(login, password);
-            this.addAccountToken(account);
+            Optional<Account> accountOptional = accountRepository.getAccountByLoginAndPassword(login, password);
+            if (accountOptional.isPresent())
+                return this.addAccountToken(accountOptional.get());
         }
         return new AccountToken();
     }

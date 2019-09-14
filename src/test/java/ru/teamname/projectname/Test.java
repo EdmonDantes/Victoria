@@ -1,62 +1,71 @@
 package ru.teamname.projectname;
 
+import org.hibernate.Hibernate;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import ru.teamname.projectname.entity.localization.Currency;
-import ru.teamname.projectname.entity.localization.LocalizationPrice;
-import ru.teamname.projectname.entity.localization.LocalizationString;
-import ru.teamname.projectname.repository.localization.CurrencyRepository;
-import ru.teamname.projectname.repository.localization.LocalizationPriceRepository;
-import ru.teamname.projectname.repository.localization.LocalizationStringRepository;
+import ru.teamname.projectname.entity.account.Account;
+import ru.teamname.projectname.entity.game.Lobby;
+import ru.teamname.projectname.repository.account.AccountRepository;
+import ru.teamname.projectname.repository.game.LobbyRepository;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.List;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class Test {
 
     @Resource
-    private LocalizationStringRepository lstring;
+    private AccountRepository accountRepository;
 
     @Resource
-    private CurrencyRepository cr;
-
-    @Resource
-    private LocalizationPriceRepository lpr;
+    private LobbyRepository lobbyRepository;
 
     @org.junit.Test
     @Transactional
-    public void test(){
-        LocalizationString string1 = new LocalizationString();
-        string1.setLocale(Locale.ENGLISH.toString());
-        string1.setString("Dollar");
-        lstring.save(string1);
+    public void test1(){
+        Account account = new Account();
+        account.setLogin("Test");
+        account.setPassword("test");
+        account.setCountGame(52);
+        account.setGamePoints(85);
 
-        LocalizationString string2 = new LocalizationString();
-        string2.setLocale("ru");
-        string2.setString("Доллар");
-        lstring.save(string2);
+        accountRepository.save(account);
+        accountRepository.flush();
 
-        lstring.flush();
+        Lobby lobby = new Lobby();
+        lobby.setName("TestLobby");
+        lobby.setAdmin(account);
+        //lobby.setPlayers(Collections.singleton(account));
+        lobbyRepository.save(lobby);
+        lobbyRepository.flush();
 
-        Currency currency = new Currency();
-        currency.setName(new HashSet<>(Arrays.asList(string1, string2)));
-        cr.save(currency);
+        lobbyRepository.addPlayerToLobby(lobby.getId(), account.getId());
+        lobbyRepository.flush();
 
-        cr.flush();
-
-        LocalizationPrice price = new LocalizationPrice();
-        price.setCurrency(currency);
-        price.setPrice(20);
-        lpr.save(price);
-        lpr.flush();
-
-        System.out.println(price.getId());
-
+        //accountRepository.updateLobby(account.getId(), lobby);
+        //accountRepository.flush();
     }
+
+    @org.junit.Test
+    @Transactional
+    public void test2(){
+        List<Lobby> lobbySet = lobbyRepository.findAll();
+        Lobby lobby = lobbySet.get(0);
+        Hibernate.initialize(lobby.getPlayers());
+        assert lobby.getPlayers().size() > 0;
+
+        List<Account> accounts = accountRepository.findAll();
+        Account account = accounts.get(0);
+        if (!Hibernate.isInitialized(account.getLobby()))
+            Hibernate.initialize(account.getLobby());
+        assert account.getLobby() != null;
+    }
+
+    @org.junit.Test
+    @Transactional
+    public void test3(){}
 }

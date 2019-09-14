@@ -10,8 +10,11 @@ import ru.teamname.projectname.entity.localization.LocalizationPrice;
 @Repository
 public interface LocalizationPriceRepository extends JpaRepository<LocalizationPrice, Integer> {
 
-    @Query("update LocalizationPrice lprice set lprice.currency = :currency where lprice.id = :lparam")
+    @Query("update LocalizationPrice lprice set lprice.currency = :currency where lprice.id = :lprice")
     @Modifying
-    public void updateCurrency(@Param("lparam") Integer lparam, @Param("currency") Integer currency);
+    void updateCurrency(@Param("lprice") Integer lprice, @Param("currency") Integer currency);
 
+    @Query("update LocalizationPrice lprice set lprice.price = :price where lprice.id = :lprice")
+    @Modifying
+    void updatePrice(@Param("lprice") Integer lprice, @Param("price") Integer price);
 }

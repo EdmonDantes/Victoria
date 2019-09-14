@@ -7,7 +7,7 @@ import ru.teamname.projectname.entity.localization.Currency;
 import ru.teamname.projectname.entity.localization.LocalizationPrice;
 import ru.teamname.projectname.entity.localization.LocalizationString;
 import ru.teamname.projectname.repository.account.AccountTokenRepository;
-import ru.teamname.projectname.service.LocalizationService;
+import ru.teamname.projectname.service.entity.LocalizationService;
 
 @RestController
 @RequestMapping(path = "api/localization")
